@@ -79,13 +79,14 @@ export default function Homepage() {
           </p>
 
           <div className="pt-6 md:pt-10 flex justify-center">
-            <button className="flex items-center gap-2 px-10 py-5 text-lg md:text-xl font-light text-white border-2 border-zinc-500 transition-all duration-300 hover:shadow-2xl hover:scale-[1.03] active:scale-[0.98]">
-              Write Something
+            <button className="flex items-center gap-2 px-10 py-5 lg:text-lg md:text-xl font-light text-white border-2 border-zinc-300 transition-all duration-300 hover:shadow-2xl hover:scale-[1.03] active:scale-[0.98] hover:text-black hover:bg-white">
+              write something
               <ArrowRight size={24} />
             </button>
           </div>
         </div>
       </section>
+
       {/* fetures of the product section  */}
       <section className="bg-black text-white py-28 px-6">
         <div className="max-w-6xl mx-auto">
@@ -118,6 +119,12 @@ export default function Homepage() {
               </div>
             ))}
           </div>
+          <p
+            className="text-center mt-20 text-white/20 tracking-widest uppercase text-xs"
+            style={{ fontFamily: 'monospace' }}
+          >
+            Dream · Create · Refine
+          </p>
         </div>
       </section>
     </div>

@@ -3,13 +3,13 @@ import { Menu } from 'lucide-react';
 
 export default function Navbar() {
   return (
-    <nav className="absolute top-0 left-0 right-0 bg-black z-20 flex items-center justify-between px-8 py-5">
+    <nav className="fixed top-0 left-0 right-0 bg-blend-overlay z-20 flex items-center justify-between px-8 py-5">
       {/* Left Section */}
       <div className="flex items-center gap-3">
         <img
           src={Logo}
           alt="AI Writer Logo"
-          className="w-12 h-12 rounded-4xl object-cover"
+          className="w-12 h-12 rounded-4xl object-cover transition-all duration-300 hover:shadow-2xl hover:scale-110"
         />
 
         <span className="text-white/90 font-semibold tracking-wide text-lg font-serif">
