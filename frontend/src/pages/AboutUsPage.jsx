@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const AboutUsPage = () => {
   return (
-    <div className="min-h-screen bg-black text-gray-200">
+    <div className="min-h-screen  text-gray-200">
       <Link to="/">
         <ArrowLeft
           className="text-white sticky top-0 left-0 ms-12 mt-5"
@@ -39,20 +39,8 @@ const AboutUsPage = () => {
       </section>
 
       {/* Main Content */}
-      <section className="py-16 px-6 md:px-12 lg:px-20 max-w-5xl mx-auto">
+      <section className="py-16 px-6 md:px-12 lg:px-15 max-w-5xl mx-auto">
         <div className="prose prose-invert prose-lg md:prose-xl max-w-none">
-          <p className="text-gray-300 leading-relaxed mb-10">
-            Founded by Surjan, a passionate builder from Ludhiana, Punjab,
-            Inkforge AI was born out of a simple frustration shared by countless
-            creators, marketers, entrepreneurs, and writers: most AI writing
-            tools spit out generic, robotic text that feels flat, repetitive,
-            and — let's be honest — painfully boring. They solve the "blank
-            page" problem but create a new one: uninspired output that doesn't
-            engage readers, rank well, or convert.
-          </p>
-          <p className="text-gray-300 leading-relaxed mb-12">
-            We set out to change that.
-          </p>
           {/* Mission */}
           <h2 className="text-4xl md:text-5xl font-bold mt-16 mb-8 text-white">
             Our Mission
@@ -74,7 +62,7 @@ const AboutUsPage = () => {
             points in the content creation workflow:
           </p>
           <ul className="space-y-10 list-none">
-            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-gray-600/50 transition-all duration-300">
+            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-pink-600/50 transition-all duration-300">
               <h3 className="text-2xl font-bold text-white mb-4">
                 Idea-First Workflow
               </h3>
@@ -87,7 +75,7 @@ const AboutUsPage = () => {
               </p>
             </li>
 
-            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-gray-600/50 transition-all duration-300">
+            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-pink-600/50 transition-all duration-300">
               <h3 className="text-2xl font-bold text-white mb-4">
                 Vibrant, Multi-Dimensional Writing
               </h3>
@@ -100,7 +88,7 @@ const AboutUsPage = () => {
               </p>
             </li>
 
-            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-gray-600/50 transition-all duration-300">
+            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-pink-600/50 transition-all duration-300">
               <h3 className="text-2xl font-bold text-white mb-4">
                 Inline Suggestions & Real-Time Enhancement
               </h3>
@@ -113,7 +101,7 @@ const AboutUsPage = () => {
             </li>
 
             <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-pink-600/50 transition-all duration-300">
-              <h3 className="text-2xl font-bold text-pink-400 mb-4">
+              <h3 className="text-2xl font-bold text-white mb-4">
                 Stylistic Customization & Visual Polish
               </h3>
               <p>
@@ -125,7 +113,7 @@ const AboutUsPage = () => {
               </p>
             </li>
 
-            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-gray-600/50 transition-all duration-300">
+            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-pink-600/50 transition-all duration-300">
               <h3 className="text-2xl font-bold text-white mb-4">
                 Grammar, Strength & Quality Engine
               </h3>
@@ -137,7 +125,7 @@ const AboutUsPage = () => {
               </p>
             </li>
 
-            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-gray-600/50 transition-all duration-300">
+            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-pink-600/50 transition-all duration-300">
               <h3 className="text-2xl font-bold text-white mb-4">
                 Export Flexibility
               </h3>
@@ -150,7 +138,7 @@ const AboutUsPage = () => {
               </p>
             </li>
 
-            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-gray-600/50 transition-all duration-300">
+            <li className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-pink-600/50 transition-all duration-300">
               <h3 className="text-2xl font-bold text-white mb-4">
                 Problem-Solving Core
               </h3>
@@ -190,15 +178,9 @@ const AboutUsPage = () => {
             with strength, personality, and zero boredom.
           </p>
           <div className="text-center mt-16">
-            <p className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Ready to forge content that actually matters?
-            </p>
-            <p className="text-2xl text-gray-300 mb-10">
-              Join us at Inkforge AI — where ideas become ink, and boring blogs
-              become history.
-            </p>
             <p className="text-xl italic text-gray-300">
-              Built with passion by Surjan. Powered by AI that understands you.
+              Built with ❤️ by Surjan. AI that understands your thoughts,
+              adjustments, creativity.
             </p>
           </div>
         </div>
