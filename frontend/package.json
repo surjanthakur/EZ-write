@@ -12,26 +12,33 @@
   "dependencies": {
     "@floating-ui/dom": "^1.7.5",
     "@tailwindcss/vite": "^4.2.0",
+    "@tiptap/cli": "^3.19.0",
+    "@tiptap/extension-link": "^3.20.0",
+    "@tiptap/extension-placeholder": "^3.20.0",
+    "@tiptap/extension-underline": "^3.20.0",
     "@tiptap/pm": "^3.20.0",
     "@tiptap/react": "^3.20.0",
     "@tiptap/starter-kit": "^3.20.0",
+    "add": "^2.0.6",
     "axios": "^1.13.5",
     "lucide-react": "^0.575.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.13.0",
-    "tailwindcss": "^4.2.0"
+    "tailwindcss": "^4.2.0",
+    "textarea-autosize": "^1.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
-    "eslint": "^9.39.3",
+    "eslint": "^10.0.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "sass-embedded": "^1.97.3",
     "vite": "^8.0.0-beta.13"
   },
   "overrides": {
