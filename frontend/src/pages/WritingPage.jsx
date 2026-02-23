@@ -3,15 +3,6 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
-import {
-  Toolbar,
-  ToolbarGroup,
-  ToolbarSeparator,
-} from "@/components/tiptap-ui-primitive/toolbar";
-import { Button } from "@/components/tiptap-ui-primitive/button";
-import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
-import { BoldIcon } from "@/components/icons/bold-icon";
-import { ItalicIcon } from "@/components/icons/italic-icon";
 
 export default function WritingPageEditor() {
   const [title, setTitle] = useState("");
@@ -64,64 +55,38 @@ export default function WritingPageEditor() {
 
         <div className="border-t border-zinc-300 mb-8"></div>
 
-        {/* 🔥 New Toolbar */}
-        <Toolbar variant="default" style="normal" className="mb-6">
-          <ToolbarGroup>
-            <Button
-              data-style="ghost"
-              onClick={() => editor.chain().focus().toggleBold().run()}
-              data-active={editor.isActive("bold")}
-            >
-              <BoldIcon className="tiptap-button-icon" />
-            </Button>
+        {/* Toolbar */}
+        <div className="flex gap-4 mb-4 ">
+          <button
+            className="px-3 py-2 rounded-2xl font-extralight transition-all bg-black text-white"
+            onClick={() => editor?.chain().focus().toggleBold().run()}
+          >
+            Bold
+          </button>
 
-            <Button
-              data-style="ghost"
-              onClick={() => editor.chain().focus().toggleItalic().run()}
-              data-active={editor.isActive("italic")}
-            >
-              <ItalicIcon className="tiptap-button-icon" />
-            </Button>
+          <button
+            className="px-3 py-2 rounded-2xl font-extralight transition-all bg-black text-white"
+            onClick={() => editor?.chain().focus().toggleItalic().run()}
+          >
+            Italic
+          </button>
 
-            <Button
-              data-style="ghost"
-              onClick={() =>
-                editor.chain().focus().toggleHeading({ level: 2 }).run()
-              }
-              data-active={editor.isActive("heading", { level: 2 })}
-            >
-              H2
-            </Button>
+          <button
+            className="px-3 py-2 rounded-2xl font-extralight transition-all bg-black text-white"
+            onClick={() =>
+              editor?.chain().focus().toggleHeading({ level: 2 }).run()
+            }
+          >
+            H2
+          </button>
 
-            <Button
-              data-style="ghost"
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
-              data-active={editor.isActive("bulletList")}
-            >
-              List
-            </Button>
-          </ToolbarGroup>
-
-          <ToolbarSeparator />
-
-          <ToolbarGroup>
-            <Button
-              data-style="ghost"
-              onClick={() => editor.chain().focus().toggleUnderline().run()}
-              data-active={editor.isActive("underline")}
-            >
-              U
-            </Button>
-          </ToolbarGroup>
-
-          <Spacer />
-
-          <ToolbarGroup>
-            <Button data-style="primary" onClick={handleSave}>
-              Publish
-            </Button>
-          </ToolbarGroup>
-        </Toolbar>
+          <button
+            className="px-3 py-2 rounded-2xl font-extralight transition-all bg-black text-white"
+            onClick={() => editor?.chain().focus().toggleBulletList().run()}
+          >
+            List
+          </button>
+        </div>
 
         {/* Editor */}
         <EditorContent
