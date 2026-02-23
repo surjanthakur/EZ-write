@@ -65,7 +65,7 @@ export default function WritingPageEditor() {
         <div className="border-t border-zinc-300 mb-8"></div>
 
         {/* 🔥 New Toolbar */}
-        <Toolbar variant="default" className="mb-6">
+        <Toolbar variant="default" style="normal" className="mb-6">
           <ToolbarGroup>
             <Button
               data-style="ghost"
