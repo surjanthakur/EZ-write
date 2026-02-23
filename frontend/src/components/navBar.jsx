@@ -21,25 +21,35 @@ export default function Navbar() {
 
       {/* Right Section */}
       <div className="hidden md:flex items-center gap-10">
-        {['Features', 'About', 'Editor', 'Login', 'Signup'].map((item) => (
-          <Link
-            key={item}
-            to={
-              item === 'About'
-                ? '/about'
-                : item === 'Editor'
-                  ? '/editor'
-                  : item === 'Login'
-                    ? '/login'
-                    : item === 'Signup'
-                      ? '/signup'
-                      : `#${item.toLowerCase()}`
-            }
-            className="text-white/50 hover:text-white transition-colors duration-300 text-sm tracking-widest uppercase"
-          >
-            {item}
-          </Link>
-        ))}
+        {['Features', 'About', 'Editor', 'Login', 'Signup'].map((item) =>
+          item === 'Features' ? (
+            <a
+              key={item}
+              href="#features"
+              className="text-white/50 hover:text-white transition-colors duration-300 text-sm tracking-widest uppercase"
+            >
+              {item}
+            </a>
+          ) : (
+            <Link
+              key={item}
+              to={
+                item === 'About'
+                  ? '/about'
+                  : item === 'Editor'
+                    ? '/editor'
+                    : item === 'Login'
+                      ? '/login'
+                      : item === 'Signup'
+                        ? '/signup'
+                        : `/${item.toLowerCase()}`
+              }
+              className="text-white/50 hover:text-white transition-colors duration-300 text-sm tracking-widest uppercase"
+            >
+              {item}
+            </Link>
+          )
+        )}
       </div>
 
       {/* Mobile Menu Icon */}

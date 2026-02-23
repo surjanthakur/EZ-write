@@ -87,8 +87,8 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* fetures of the product section  */}
-      <section className="bg-black text-white py-28 px-6">
+      {/* fetures of the product*/}
+      <section id="features" className="bg-black text-white py-28 px-6">
         <div className="max-w-6xl mx-auto">
           {/* Heading */}
           <div className="text-center space-y-6 mb-20">
