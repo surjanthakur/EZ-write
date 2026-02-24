@@ -1,0 +1,20 @@
+from fastapi import FastAPI
+from .db.db_connection import create_db_tables
+import logging
+
+
+# list of all, we need to create the database tables before the application starts.
+# We can use the lifespan event of FastAPI to achieve this.
+# The lifespan event allows us to run code before the application starts and after it shuts down.
+async def lifespan(app: FastAPI):
+    try:
+        create_db_tables()
+        yield
+    except Exception as e:
+        logging.error(f"Error during application startup: {e}")
+        raise e
+
+    logging.info("Application shutdown.....")
+
+
+app = FastAPI(lifespan=lifespan)
