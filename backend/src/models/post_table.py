@@ -20,6 +20,4 @@ class Post(SQLModel, table=True):
     content: str = Field(..., min_length=10)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     post_type: str
-    owner: Optional["User"] = Relationship(
-        back_populates="posts",
-    )
+    owner: Optional["User"] = Relationship(back_populates="posts")
