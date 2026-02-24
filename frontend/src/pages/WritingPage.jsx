@@ -54,6 +54,7 @@ export default function WritingPageEditor() {
         <input
           type="text"
           placeholder="Title"
+          required
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full text-5xl font-serif font-semibold bg-transparent outline-none mb-4"
@@ -63,6 +64,7 @@ export default function WritingPageEditor() {
         <textarea
           placeholder="Write a short description..."
           value={description}
+          required
           onChange={(e) => setDescription(e.target.value)}
           className="w-full text-lg text-zinc-600 bg-transparent outline-none resize-none mb-8"
         />
@@ -85,7 +87,7 @@ export default function WritingPageEditor() {
         <div className="mt-10">
           <button
             onClick={handleSave}
-            className="px-5 py-2 bg-black text-white rounded-sm"
+            className="px-5 py-2 bg-black text-white rounded-sm hover:bg-gray-600 transition-colors duration-200"
           >
             Save
           </button>
