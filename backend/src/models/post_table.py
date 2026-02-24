@@ -8,6 +8,10 @@ from typing import Optional
 
 
 class Post(SQLModel, table=True):
+    """
+    Post model representing a post created by a user.
+    """
+
     post_id: UUID = Field(default_factory=lambda: uuid.uuid4(), primary_key=True)
     user_id: UUID = Field(
         foreign_key="user.user_id",
