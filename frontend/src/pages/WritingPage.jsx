@@ -27,6 +27,7 @@ export default function WritingPageEditor() {
     const blogData = {
       title,
       description,
+      post_type: postType,
       content: editor.getJSON(),
     };
 
@@ -81,15 +82,27 @@ export default function WritingPageEditor() {
     border border-gray-300 font-sans
   "
         />
+
         <div className="mt-10 gap-3 flex flex-row">
           {/* post type options */}
           <div className="flex gap-3">
             <label className="block text-sm font-medium">Post Type</label>
             <select className=" border px-3 py-2 text-white rounded-2xl cursor-pointer bg-linear-to-b from-black to-gray-500">
-              <option value="blog">Blog</option>
-              <option value="article">Article</option>
+              <option
+                onClick={(e) => setPostType(e.target.value)}
+                value={postType}
+              >
+                Blog
+              </option>
+              <option
+                onClick={(e) => setPostType(e.target.value)}
+                value={postType}
+              >
+                Article
+              </option>
             </select>
           </div>
+
           {/* save button */}
           <button
             onClick={handleSave}
