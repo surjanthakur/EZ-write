@@ -7,7 +7,7 @@ from typing import AsyncGenerator
 from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import SQLModel
 
-logger = logging.getLogger(__name__, level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 # Database connection and session management

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from db.db_connection import create_db_tables
+from .db.db_connection import create_db_tables
 import logging
 from fastapi.middleware.cors import CORSMiddleware
 from router import users_router
@@ -10,11 +10,11 @@ from router import users_router
 # The lifespan event allows us to run code before the application starts and after it shuts down.
 async def lifespan(app: FastAPI):
     try:
-        create_db_tables()
+        await create_db_tables()
         yield
-    except Exception as e:
-        logging.error(f"Error during application startup: {e}")
-        raise e
+    except Exception:
+        logging.error(f"Error during application startup")
+        raise
 
     logging.info("Application shutdown.....")
 
