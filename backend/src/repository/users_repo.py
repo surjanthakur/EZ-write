@@ -7,3 +7,8 @@ from sqlmodel import select
 async def get_user_by_username(username, db: AsyncSession):
     query = await db.exec(select(User).where(User.username == username))
     return query.first()
+
+
+async def user_by_id(id, db: AsyncSession):
+    query = await db.exec(select(User).where(User.user_id == id))
+    return query.first()

@@ -1,10 +1,10 @@
-from fastapi import status, HTTPException
+from fastapi import status, HTTPException, Response, Cookie
 from sqlmodel.ext.asyncio.session import AsyncSession
-import jwt
 from ..schemas.user import UserCreate, LoginRequest
-from ..repository.users_repo import get_user_by_username
+from ..repository.users_repo import get_user_by_username, user_by_id
 from ..db.models import User
-from .security import pass_hash, verify_password
+from ..db.redis_client import redis_client
+from .security import pass_hash, verify_password, create_session_id
 import asyncio
 
 
@@ -36,4 +36,49 @@ async def create_user(user_data: UserCreate, db: AsyncSession):
 
 # authenticate user
 async def authenticate_user(user_data: LoginRequest, db: AsyncSession):
-    pass
+    # 1️⃣ Check if user exists
+    user = await get_user_by_username(username=user_data.username, db=db)
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
+        )
+    # 2️⃣ Verify password
+    if not verify_password(plain_pass=user_data.password, hash_pass=user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
+        )
+
+    # 3️⃣ Create session_id
+    session_id = create_session_id(byte_length=32)
+
+    # 4️⃣ Store session in Redis
+    await redis_client.set(
+        f"session:{session_id}",
+        user.user_id,
+        ex=60 * 60 * 24,
+    )
+    Response.set_cookie(
+        key="session_id",
+        value=session_id,
+        httponly=True,
+        max_age=60 * 60 * 24,
+        secure=False,  # todo: set True in production (HTTPS)
+        samesite="lax",
+    )
+
+    return {"message": "Login successful"}
+
+
+# get curr user info
+async def current_user(db: AsyncSession, session_id: str = Cookie(None)):
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    user_id = await redis_client.get(f"session:{session_id}")
+
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    curr_user = await user_by_id(id=user_id, db=db)
+    return curr_user
