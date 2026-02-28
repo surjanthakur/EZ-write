@@ -18,7 +18,7 @@ def pass_hash(plain_pass):
 
 # create new user
 async def create_user(user_data: UserCreate, session: AsyncSession):
-    user = await get_user_by_email(email=user_data.email, db=session)
+    user = await get_user_by_email(username=user_data.username, db=session)
 
     if user:
         raise HTTPException(
