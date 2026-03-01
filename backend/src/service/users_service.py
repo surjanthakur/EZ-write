@@ -1,8 +1,9 @@
-from fastapi import status, HTTPException, Response, Cookie
+from fastapi import status, HTTPException, Response, Cookie, Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from ..schemas.user import UserCreate, LoginRequest
 from ..repository.users_repo import get_user_by_username, user_by_id
 from ..db.models import User
+from ..db.db_connection import get_session
 from ..db.redis_client import redis_client
 from .security import pass_hash, verify_password, create_session_id
 import asyncio
@@ -71,7 +72,9 @@ async def authenticate_user(user_data: LoginRequest, db: AsyncSession):
 
 
 # get curr user info
-async def current_user(db: AsyncSession, session_id: str = Cookie(None)):
+async def current_user(
+    db: AsyncSession = Depends(get_session), session_id: str = Cookie(None)
+):
     if not session_id:
         raise HTTPException(status_code=401, detail="Not authenticated")
 

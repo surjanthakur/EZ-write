@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status, Cookie
+from fastapi import APIRouter, Depends, status
 from ..db.db_connection import get_session
 from ..db.models import User
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -27,8 +27,5 @@ async def login_account(
 
 # get account
 @user_router.get("/me")
-async def get_current_user(
-    session_db: AsyncSession = Depends(get_session),
-    session_id: str | None = Cookie(None),
-):
-    return await current_user(db=session_db, session_id=session_id)
+async def get_current_user(curr_user: User = Depends(current_user)):
+    return curr_user
