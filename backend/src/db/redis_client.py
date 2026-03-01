@@ -1,4 +1,4 @@
-import redis
+import redis.asyncio
 
 
-redis_client = redis.Redis(host="localhost", port=6379, decode_responses=True)
+redis_client = redis.asyncio.Redis(host="localhost", port=6379, decode_responses=True)

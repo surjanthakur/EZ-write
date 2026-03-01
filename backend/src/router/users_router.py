@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Response
 from ..db.db_connection import get_session
 from ..db.models import User
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -20,9 +20,9 @@ async def create_account(
 # login account
 @user_router.post("/login", status_code=status.HTTP_200_OK)
 async def login_account(
-    req_form: LoginRequest, session_db: AsyncSession = Depends(get_session)
+    req_form: LoginRequest, response: Response, session_db: AsyncSession = Depends(get_session)
 ):
-    return await authenticate_user(user_data=req_form, db=session_db)
+    return await authenticate_user(user_data=req_form, response=response, db=session_db)
 
 
 # get account
