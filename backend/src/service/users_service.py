@@ -5,7 +5,7 @@ from ..repository.users_repo import get_user_by_username, user_by_id
 from ..db.models import User
 from ..db.db_connection import get_session
 from ..db.redis_client import redis_client
-from .security import pass_hash, verify_password, create_session_id
+from .security import pass_hash, verify_password
 import asyncio
 import uuid
 
