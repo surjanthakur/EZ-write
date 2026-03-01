@@ -10,7 +10,7 @@ from sqlmodel import SQLModel
 
 # Database connection and session management
 class Settings(BaseSettings):
-    DB_URl: str
+    DB_URL: str
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -23,7 +23,7 @@ settings = Settings()
 
 # Create an asynchronous engine for the database connection
 async_engine: AsyncEngine = create_async_engine(
-    settings.DB_URl,
+    settings.DB_URL,
     echo=False,
     connect_args={"timeout": 60, "ssl": True},
 )
