@@ -71,7 +71,7 @@ async def authenticate_user(
         print(f"Login error: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="something went wrong try again!",
+            detail=f"something went wrong try again! {e}",
         )
 
 
