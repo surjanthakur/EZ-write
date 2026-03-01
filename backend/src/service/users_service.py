@@ -1,7 +1,7 @@
 from fastapi import status, HTTPException, Response, Cookie, Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from ..schemas.user import UserCreate, LoginRequest
-from ..repository.users_repo import get_user_by_username, user_by_id
+from ..repository.users_repo import user_by_email, user_by_id
 from ..db.models import User
 from ..db.db_connection import get_session
 from ..db.redis_client import redis_client
@@ -12,7 +12,7 @@ import uuid
 
 # create new user
 async def create_user(user_data: UserCreate, db: AsyncSession):
-    user = await get_user_by_username(username=user_data.username, db=db)
+    user = await user_by_email(email=user_data.email, db=db)
     if user:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="user already exists"
@@ -41,7 +41,7 @@ async def authenticate_user(
     user_data: LoginRequest, response: Response, db: AsyncSession
 ):
     # Check if user exists
-    user = await get_user_by_username(username=user_data.username, db=db)
+    user = await user_by_email(email=user_data.email, db=db)
 
     if not user:
         raise HTTPException(
@@ -55,6 +55,7 @@ async def authenticate_user(
     try:
         # Create session_id
         session_id = str(uuid.uuid4())
+        print(f"Generated session_id: {session_id} for user_id: {user.user_id}")
 
         # Store session in Redis
         await redis_client.set(
