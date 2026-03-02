@@ -8,7 +8,6 @@ async def lifespan(app: FastAPI):
     try:
         await create_db_tables()
         print("Database tables created successfully.")
-
         yield
     except Exception:
         raise HTTPException(status_code=500, detail="Error creating database tables")
