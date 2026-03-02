@@ -5,16 +5,23 @@ import logging
 from typing import AsyncGenerator
 from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import SQLModel
-from dotenv import load_dotenv
-import os
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-load_dotenv()
 
-db_url = os.getenv("DB_URL")
+class Settings(BaseSettings):
+    DB_URL: str
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+    )
+
+
+settings = Settings()
 
 # engine for the database connection
 async_engine: AsyncEngine = create_async_engine(
-    db_url,
+    settings.DB_URL,
     echo=False,
     connect_args={"timeout": 60, "ssl": True},
 )
