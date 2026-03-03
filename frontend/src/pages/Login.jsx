@@ -23,8 +23,8 @@ const Login = () => {
         navigate("/");
       },500)
      }else{
-      toast.error(error)
-     }
+      toast.error(error || "Login failed. Please try again.");
+    }
     } catch (err) {
       toast.error(
         error || "❌ An error occurred during Login. Please try again."

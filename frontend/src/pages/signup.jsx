@@ -21,7 +21,9 @@ const Signup = () => {
       setTimeout(()=>{
         navigate("/login");
       },500)
-     }
+     }else {
+      toast.error( error || "Signup failed. Please try again.");
+    }
     } catch (err) {
       toast.error(
         error || "❌ An error occurred during signup. Please try again."
