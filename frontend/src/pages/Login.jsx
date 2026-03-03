@@ -22,6 +22,8 @@ const Login = () => {
         toast.success("login success")
         navigate("/");
       },500)
+     }else{
+      toast.error(error)
      }
     } catch (err) {
       toast.error(
