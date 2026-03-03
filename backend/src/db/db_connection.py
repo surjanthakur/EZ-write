@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine, async_sessi
 import logging
 from typing import AsyncGenerator
 from sqlalchemy.exc import SQLAlchemyError
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel, true
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
