@@ -1,12 +1,14 @@
 import { LockIcon, PenIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UseAuth } from "../hooks/useAuth";
 
 const Login = () => {
   const { Login, error, loading } = UseAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromEditor = location.state?.fromEditor;
   const {
     register,
     handleSubmit,
@@ -18,7 +20,7 @@ const Login = () => {
       const res = await Login(data);
       if (res?.success === true) {
         setTimeout(() => {
-          toast.success("✅");
+          toast.success("Logged in");
           navigate("/");
         }, 500);
       } else {
@@ -40,6 +42,12 @@ const Login = () => {
             <h1 className="text-3xl font-bold text-black mb-2">Welcome Back</h1>
             <p className="text-gray-600">Sign in to your account</p>
           </div>
+
+          {fromEditor && (
+            <div className="mb-4 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+              Please login to access the editor.
+            </div>
+          )}
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
