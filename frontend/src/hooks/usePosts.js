@@ -5,7 +5,7 @@ import {
   deletePost,
 } from "../services/postServices";
 
-export const UsePosts = async () => {
+export const UsePosts = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);

@@ -1,5 +1,8 @@
 import Placeholder from "@tiptap/extension-placeholder";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { EditorContent, useEditor } from "@tiptap/react";
+import { UsePosts } from "../hooks/usePosts";
 import StarterKit from "@tiptap/starter-kit";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
@@ -7,8 +10,10 @@ import { Link } from "react-router-dom";
 import "./css/editor.css";
 
 export default function WritingPageEditor() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [postType, setPostType] = useState("blog");
+  const { create_post, loading, error } = UsePosts();
 
   const editor = useEditor({
     extensions: [
@@ -23,16 +28,26 @@ export default function WritingPageEditor() {
   const handleSave = async () => {
     if (!editor) return;
 
-    const blogData = {
+    const postData = {
       title,
       post_type: postType,
       content: editor.getJSON(),
     };
 
-    // api call
-    console.log(blogData);
+    try {
+      const res = await create_post(postData);
 
-    if (!editor) return null;
+      if (res?.success === true) {
+        toast.success("Post created successfully!");
+        navigate("/");
+      } else {
+        toast.error(res?.detail || "Something went wrong! Please try again.");
+      }
+    } catch (err) {
+      toast.error(
+        error || "Failed to create post. Please check your input and try again."
+      );
+    }
   };
 
   return (
