@@ -4,7 +4,7 @@ import Signup from "./Signup";
 import AboutUsPage from "./AboutUsPage";
 import WritingPageEditor from "./WritingPage";
 import PageNotFound from "./pageNotFound";
-import Dashboard from "./Dashboard";
+import Dashboard from "./dashboard/Dashboard";
 
 export {
   Homepage,
