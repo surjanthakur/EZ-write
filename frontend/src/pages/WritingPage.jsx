@@ -1,14 +1,13 @@
-import { useState } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
-import { Toolbar } from "../components/index";
-import { Link } from "react-router-dom";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import "./css/editor.css";
 
 export default function WritingPageEditor() {
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [postType, setPostType] = useState("blog");
 
   const editor = useEditor({
@@ -26,7 +25,6 @@ export default function WritingPageEditor() {
 
     const blogData = {
       title,
-      description,
       post_type: postType,
       content: editor.getJSON(),
     };
@@ -57,31 +55,13 @@ export default function WritingPageEditor() {
           required
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full text-5xl font-serif font-semibold bg-transparent outline-none mb-4"
+          className="w-full text-5xl font-serif font-semibold bg-transparent outline-none mb-2"
         />
-
-        {/* Description */}
-        <textarea
-          placeholder="Write a short description..."
-          value={description}
-          required
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full text-lg text-zinc-600 bg-transparent outline-none resize-none mb-8"
-        />
-
-        <div className="border-t border-zinc-300 mb-8"></div>
-
-        {/* Toolbar component */}
-        <Toolbar editor={editor} />
 
         {/* Editor */}
-        <EditorContent
-          editor={editor}
-          className="
-    prose prose-lg text-2xl max-w-none text-gray-800 p-4 rounded-md bg-white
-    border border-gray-300 font-sans
-  "
-        />
+        <div className="mt-6">
+          <EditorContent editor={editor} className="ProseMirror" />
+        </div>
 
         <div className="mt-10 gap-3 flex flex-row">
           {/* post type options */}

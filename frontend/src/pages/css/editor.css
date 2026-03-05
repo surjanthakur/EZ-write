@@ -1,0 +1,37 @@
+.ProseMirror {
+  outline: none !important;
+  border: none !important;
+
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 21px;
+  line-height: 1.75;
+  color: #242424;
+
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 20px;
+
+  word-break: break-word;
+}
+
+.ProseMirror p {
+  margin: 1.2em 0;
+}
+
+.ProseMirror h1 {
+  font-size: 42px;
+  font-weight: 700;
+  margin: 1.5em 0 0.6em;
+}
+
+.ProseMirror strong {
+  font-weight: 700;
+}
+
+.ProseMirror u {
+  text-decoration: underline;
+}
+
+.ProseMirror:focus {
+  outline: none !important;
+}
