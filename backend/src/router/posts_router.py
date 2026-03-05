@@ -12,7 +12,10 @@ post_router = APIRouter(prefix="/posts", tags=["posts"])
 
 # all post
 @post_router.get("/all", status_code=status.HTTP_200_OK)
-async def get_all_posts(session_db: AsyncSession = Depends(get_session)):
+async def get_all_posts(
+    session_db: AsyncSession = Depends(get_session),
+    curr_user: User = Depends(current_user),
+):
     return await all_posts(db=session_db)
 
 
