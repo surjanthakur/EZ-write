@@ -2,7 +2,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 from db.db_connection import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
-from ..schemas.posts import PostCreate, PostResponse
+from ..schemas.posts import PostCreate
 from ..service.posts_service import create_post, all_posts, delete_post_by_id
 from ..db.models import User
 from ..service.users_service import current_user
