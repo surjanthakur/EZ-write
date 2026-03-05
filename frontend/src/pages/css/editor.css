@@ -6,11 +6,10 @@
   font-size: 21px;
   line-height: 1.75;
   color: #242424;
-
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 40px 20px;
-
+  background-color: rgba(237, 236, 235, 0.772);
+  max-width: 900px;
+  padding: 0.5rem;
+  border-radius: 12px;
   word-break: break-word;
 }
 
@@ -34,4 +33,12 @@
 
 .ProseMirror:focus {
   outline: none !important;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #9ca3af; /* light gray text */
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
