@@ -58,12 +58,17 @@ async def create_post(post_data: PostCreate, user_id: UUID, db: AsyncSession) ->
 
 
 # delete post
-async def delete_post_by_id(post_id: UUID, db: AsyncSession):
+async def delete_post_by_id(post_id: UUID, db: AsyncSession, user_id: UUID):
     try:
         post = await post_by_id(post_id=post_id, db=db)
         if not post:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Post not found."
+            )
+        if post.user_id != user_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Not authorized to delete this post.",
             )
         await db.delete(post)
         await db.commit()

@@ -1,5 +1,5 @@
 from uuid import UUID
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status
 from db.db_connection import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
 from ..schemas.posts import PostCreate, PostResponse
@@ -20,7 +20,6 @@ async def get_all_posts(session_db: AsyncSession = Depends(get_session)):
 @post_router.post(
     "/newStory",
     status_code=status.HTTP_201_CREATED,
-    response_model=PostResponse,
 )
 async def create_new_post(
     req_form: PostCreate,
@@ -33,6 +32,14 @@ async def create_new_post(
 
 
 # delete post
-@post_router.delete("/{post_id}")
-async def delete_post(post_id: UUID, session_db: AsyncSession = Depends(get_session)):
-    return await delete_post_by_id(post_id=post_id, db=session_db)
+@post_router.delete("/{post_id}", status_code=status.HTTP_200_OK)
+async def delete_post(
+    post_id: UUID,
+    session_db: AsyncSession = Depends(get_session),
+    curr_user: User = Depends(current_user),
+):
+    return await delete_post_by_id(
+        post_id=post_id,
+        db=session_db,
+        user_id=curr_user.user_id,
+    )
