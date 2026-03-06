@@ -18,14 +18,26 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const res = await Login(data);
-      if (res?.success === true) {
+
+      if (res?.success) {
         setTimeout(() => {
           toast.success("Logged in");
           navigate("/");
         }, 500);
-      } else {
-        toast.error(error || "Login failed ❌. Please try again.");
+        return;
       }
+
+      const status = res?.status;
+      const detail = res?.detail;
+
+      let message =
+        status === 401 || status === 403
+          ? "Invalid credentials. Please try again."
+          : detail
+            ? detail
+            : error || "Login failed ❌. Please try again.";
+
+      toast.error(message);
     } catch (err) {
       toast.error(
         error || "❌ An error occurred during Login. Please try again."
