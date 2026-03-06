@@ -19,15 +19,12 @@ const Login = () => {
     try {
       const res = await Login(data);
 
-      if (res?.status === 200) {
-        setTimeout(() => {
-          toast.success("Logged in");
-          navigate("/");
-        }, 500);
+      if (res?.status && res.status >= 400) {
+        toast.error(res.detail || "Login failed");
         return;
-      } else {
-        toast.error("Invalid credentials, check again!");
       }
+      toast.success("Login successful");
+      navigate("/");
     } catch (err) {
       toast.error(
         error || "❌ An error occurred during Login. Please try again."

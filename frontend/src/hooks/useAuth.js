@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { signupUser, LoginUser , CurrentUser } from "../services/authServices";
+import { signupUser, LoginUser, CurrentUser } from "../services/authServices";
 
 export const UseAuth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isCurrentUser , setIsCurrentUser] = useState(false)
-
+  const [isCurrentUser, setIsCurrentUser] = useState(false);
 
   // signup user hook
   const Signup = async (data) => {
@@ -22,7 +21,7 @@ export const UseAuth = () => {
     }
   };
   // login user hook
-  const Login = async(data) => {
+  const Login = async (data) => {
     try {
       setLoading(true);
       setError(null);
@@ -31,27 +30,24 @@ export const UseAuth = () => {
     } catch (err) {
       const detail = err.response?.data?.detail || "something went wrong";
       setError(detail);
-      // Return error info so Login page can access status & detail
-      return {
-        status: err.response?.status,
-        detail,
-      };
     } finally {
       setLoading(false);
     }
   };
 
   // curr user hook
-  const CurrUser = async() =>{
+  const CurrUser = async () => {
     try {
-      const res = await CurrentUser()
-      setIsCurrentUser(true)
-      return res
-    }catch(err){
-      setError(err.response?.data?.detail || "you are not authenticated to access resource!")
-      setIsCurrentUser(false)
+      const res = await CurrentUser();
+      setIsCurrentUser(true);
+      return res;
+    } catch (err) {
+      setError(
+        err.response?.data?.detail ||
+          "you are not authenticated to access resource!"
+      );
+      setIsCurrentUser(false);
     }
-
-  }
-  return { Signup, Login, CurrUser , loading, error ,  isCurrentUser };
+  };
+  return { Signup, Login, CurrUser, loading, error, isCurrentUser };
 };
