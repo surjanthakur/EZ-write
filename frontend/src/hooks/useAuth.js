@@ -29,7 +29,15 @@ export const UseAuth = () => {
       const res = await LoginUser(data);
       return res;
     } catch (err) {
-      setError(err.response?.data?.detail || "something went wrong");
+      const detail = err.response?.data?.detail || "something went wrong";
+      setError(detail);
+      // Return error info so Login page can access status & detail
+      return {
+        status: err.response?.status,
+        detail,
+      };
+    } finally {
+      setLoading(false);
     }
   };
 

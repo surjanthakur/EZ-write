@@ -19,7 +19,7 @@ const Login = () => {
     try {
       const res = await Login(data);
 
-      if (res?.success) {
+      if (res?.status === 200) {
         setTimeout(() => {
           toast.success("Logged in");
           navigate("/");
@@ -27,16 +27,16 @@ const Login = () => {
         return;
       }
 
-      const status = res?.status;
-      const detail = res?.detail;
-
-      let message =
-        status === 401 || status === 403
-          ? "Invalid credentials. Please try again."
-          : detail
-            ? detail
-            : error || "Login failed ❌. Please try again.";
-
+      let message;
+      if (res?.status === 401 || res?.status === 403) {
+        message = "Invalid credentials. Please try again.";
+      } else if (res?.status === 503) {
+        message = "Session service unavailable. Please try again later.";
+      } else if (res?.detail) {
+        message = res.detail;
+      } else {
+        message = error || "Login failed ❌. Please try again.";
+      }
       toast.error(message);
     } catch (err) {
       toast.error(

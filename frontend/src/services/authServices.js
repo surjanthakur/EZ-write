@@ -8,20 +8,19 @@ const API_URL = axios.create({
 // api call for signup user
 const signupUser = async (data) => {
   const res = await API_URL.post("/signup", data);
-  return res.data;
+  return { data: res.data, status: res.status };
 };
 
 // api call for login user
 const LoginUser = async (data) => {
   const res = await API_URL.post("/login", data);
-  return res.data;
+  return { data: res.data, status: res.status };
 };
 
 // api call to get current user
-const CurrentUser = async() =>{
-  const res = await API_URL.get("/me")
-  return res.data
+const CurrentUser = async () => {
+  const res = await API_URL.get("/me");
+  return res.data;
+};
 
-}
-
-export { signupUser, LoginUser , CurrentUser };
+export { signupUser, LoginUser, CurrentUser };
