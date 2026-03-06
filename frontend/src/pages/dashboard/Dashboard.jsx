@@ -30,39 +30,36 @@ export default function Dashboard() {
     .slice(0, 2)
     .toUpperCase();
 
+  // fetch curr-user
   const fetchCurrentUser = async () => {
     try {
       const res = await CurrUser();
-      if (isMounted && res) {
+      if (res) {
         setCurrentUser(res);
       }
     } catch (err) {
+      setCurrentUser(null);
       console.error(err);
     }
   };
 
-  // --- Fetch all posts on mount ---
-  useEffect(() => {
-    let isMounted = true;
-    fetchCurrentUser();
-    const fetchPosts = async () => {
-      try {
-        const res = await all_posts();
-        if (isMounted) {
-          setPosts(Array.isArray(res) ? res : []);
-        }
-      } catch (err) {
-        if (isMounted) {
-          toast.error(error);
-          console.error(err);
-          setPosts([]);
-        }
+  // fetch all posts
+  const fetchPosts = async () => {
+    try {
+      const res = await all_posts();
+      if (res) {
+        setPosts(Array.isArray(res) ? res : []);
       }
-    };
+    } catch (err) {
+      toast.error(error);
+      console.error(err);
+      setPosts([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrentUser();
     fetchPosts();
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   // --- Handlers ---
