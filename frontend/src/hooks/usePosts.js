@@ -8,14 +8,12 @@ import {
 export const UsePosts = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [posts, setPosts] = useState([]);
 
   const all_posts = async () => {
     try {
       setLoading(true);
       setError(null);
       const res = await get_all_posts();
-      setPosts(res);
       return res;
     } catch (err) {
       setError(err.response?.data?.detail || "Failed to fetch posts");
