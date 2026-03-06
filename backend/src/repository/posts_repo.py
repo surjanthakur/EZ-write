@@ -1,8 +1,7 @@
 from uuid import UUID
 from ..db.models import Post
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlmodel import Uuid, select
-from sqlalchemy.orm import selectinload
+from sqlmodel import select
 
 
 async def get_all_posts(db: AsyncSession):

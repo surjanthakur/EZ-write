@@ -4,6 +4,7 @@ import { Header } from "./Header";
 import { PostCard } from "./PostCards";
 import { PenLine, Search, Menu, X } from "lucide-react";
 import { UsePosts } from "../../hooks/usePosts";
+import { UseAuth } from "../../hooks/useAuth";
 import { toast } from "react-hot-toast";
 
 const FILTERS = ["All", "Blog", "Article"];
@@ -13,15 +14,37 @@ export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [posts, setPosts] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const { all_posts, error } = UsePosts();
+  const { CurrUser } = UseAuth();
 
   const safePosts = Array.isArray(posts) ? posts : [];
   const postsCount = safePosts.length;
 
+  const displayName = currentUser?.username || "User";
+
+  const avatarInitials = displayName
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  const fetchCurrentUser = async () => {
+    try {
+      const res = await CurrUser();
+      if (isMounted && res) {
+        setCurrentUser(res);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // --- Fetch all posts on mount ---
   useEffect(() => {
     let isMounted = true;
-
+    fetchCurrentUser();
     const fetchPosts = async () => {
       try {
         const res = await all_posts();
@@ -88,13 +111,15 @@ export default function Dashboard() {
           </button>
           <span className="text-sm text-gray-700 font-medium">Dashboard</span>
           <div className="w-8 h-8 rounded-full bg-linear-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
-            <span className="text-white text-xs font-semibold">AJ</span>
+            <span className="text-white text-xs font-semibold">
+              {avatarInitials}
+            </span>
           </div>
         </div>
 
         {/* Desktop Header */}
         <div className="hidden lg:block">
-          <Header username="Alyssa Jones" avatarInitials="AJ" />
+          <Header username={displayName} avatarInitials={avatarInitials} />
         </div>
 
         {/* Page content */}
@@ -102,7 +127,7 @@ export default function Dashboard() {
           {/* Welcome Banner */}
           <div className="rounded-2xl bg-linear-to-r from-violet-100 via-purple-50 to-indigo-50 border border-violet-100 px-8 py-6 flex items-center justify-between overflow-hidden relative">
             <div>
-              <h2 className="text-gray-900 text-2xl">Hi, Alyssa 👋</h2>
+              <h2 className="text-gray-900 text-2xl">Hi, {displayName} 👋</h2>
               <p className="text-gray-500 text-sm mt-1">
                 Ready to write something great today?
               </p>
