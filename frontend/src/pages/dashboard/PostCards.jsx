@@ -2,7 +2,6 @@ import { Pencil, Trash2 } from "lucide-react";
 import PostImage from "../../assets/soft-cartoon.jpeg";
 
 export function PostCard({ post, onEdit, onDelete }) {
-  // Map badge color classes based on type
   const typeBadgeColors = {
     blog: "bg-violet-100 text-violet-600",
     article: "bg-amber-100 text-amber-600",
