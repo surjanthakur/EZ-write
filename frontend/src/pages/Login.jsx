@@ -25,19 +25,9 @@ const Login = () => {
           navigate("/");
         }, 500);
         return;
-      }
-
-      let message;
-      if (res?.status === 401 || res?.status === 403) {
-        message = "Invalid credentials. Please try again.";
-      } else if (res?.status === 503) {
-        message = "Session service unavailable. Please try again later.";
-      } else if (res?.detail) {
-        message = res.detail;
       } else {
-        message = error || "Login failed ❌. Please try again.";
+        toast.error("Invalid credentials, check again!");
       }
-      toast.error(message);
     } catch (err) {
       toast.error(
         error || "❌ An error occurred during Login. Please try again."
