@@ -5,7 +5,7 @@ from ..db.models import Post, postType
 from ..schemas.posts import PostCreate
 from sqlmodel.ext.asyncio.session import AsyncSession
 from fastapi import status, HTTPException
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError
 from ..repository.posts_repo import get_all_posts, post_by_id
 
 logger = logging.getLogger(__name__)
@@ -60,12 +60,6 @@ async def create_post(post_data: PostCreate, user_id: UUID, db: AsyncSession) ->
         await db.commit()
         await db.refresh(new_post)
         return {"detail": "post created sucessfully", "success": True}
-    except IntegrityError:
-        await db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Post already exists for this user!",
-        )
     except SQLAlchemyError as error:
         await db.rollback()
         logger.error(f"create_post failed for user_id={user_id}:=> {error}")

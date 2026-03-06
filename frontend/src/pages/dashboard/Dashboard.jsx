@@ -12,18 +12,11 @@ export default function Dashboard() {
   const [activeNav, setActiveNav] = useState("home");
   const [activeFilter, setActiveFilter] = useState("All");
   const [posts, setPosts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { all_posts, error } = UsePosts();
 
-  // --- Filter posts by type and search query ---
-  const filteredPosts = posts.filter((post) => {
-    const typeMatch = activeFilter === "All" || post.type === activeFilter;
-    const searchMatch =
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return typeMatch && searchMatch;
-  });
+  const safePosts = Array.isArray(posts) ? posts : [];
+  const postsCount = safePosts.length;
 
   // --- Fetch all posts on mount ---
   useEffect(() => {
@@ -33,7 +26,7 @@ export default function Dashboard() {
       try {
         const res = await all_posts();
         if (isMounted) {
-          setPosts(res);
+          setPosts(Array.isArray(res) ? res : []);
         }
       } catch (err) {
         if (isMounted) {
@@ -134,8 +127,8 @@ export default function Dashboard() {
               <div>
                 <h3 className="text-gray-700">Overview</h3>
                 <p className="text-xs text-gray-400">
-                  {filteredPosts.length} post
-                  {filteredPosts.length !== 1 ? "s" : ""} found
+                  {postsCount} post
+                  {postsCount !== 1 ? "s" : ""} found
                 </p>
               </div>
             </div>
@@ -159,8 +152,8 @@ export default function Dashboard() {
 
           {/* Post Cards */}
           <div className="space-y-3">
-            {filteredPosts.length > 0 ? (
-              filteredPosts.map((post, idx) => (
+            {safePosts.length > 0 ? (
+              safePosts.map((post, idx) => (
                 <PostCard
                   key={idx}
                   post={post}
@@ -174,15 +167,6 @@ export default function Dashboard() {
                   <Search size={20} className="text-gray-300" />
                 </div>
                 <p className="text-gray-400 text-sm">No posts found</p>
-                <button
-                  onClick={() => {
-                    setActiveFilter("All");
-                    setSearchQuery("");
-                  }}
-                  className="mt-3 text-xs text-indigo-500 hover:underline"
-                >
-                  Clear filters
-                </button>
               </div>
             )}
           </div>

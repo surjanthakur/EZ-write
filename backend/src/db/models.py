@@ -16,7 +16,7 @@ class User(SQLModel, table=True):
     """
 
     user_id: UUID = Field(
-        default_factory=lambda: uuid.uuid4(), primary_key=True, unique=True, index=True
+        default_factory=lambda: uuid.uuid4(), primary_key=True, index=True
     )
     username: str = Field(unique=True, index=True, min_length=3, max_length=50)
     email: str = Field(unique=True, min_length=5, max_length=255, index=True)
@@ -44,12 +44,11 @@ class Post(SQLModel, table=True):
     """
 
     post_id: UUID = Field(
-        default_factory=lambda: uuid.uuid4(), primary_key=True, unique=True, index=True
+        default_factory=lambda: uuid.uuid4(), primary_key=True, index=True
     )
     user_id: UUID = Field(
         foreign_key="user.user_id",
         nullable=False,
-        unique=True,
         ondelete="CASCADE",
     )
     title: str = Field(..., min_length=1, max_length=255)
