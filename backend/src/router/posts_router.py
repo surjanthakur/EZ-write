@@ -25,8 +25,12 @@ async def get_all_posts(
 
 
 # get posts
-@post_router.get("/{post_id}")
-async def get_posts(post_id: UUID, session_db: AsyncSession):
+@post_router.get("/{post_id}", status_code=status.HTTP_200_OK)
+async def get_posts(
+    post_id: UUID,
+    session_db: AsyncSession = Depends(get_session),
+    curr_user: User = Depends(current_user),
+):
     return await get_single_post(post_id=post_id, db=session_db)
 
 
