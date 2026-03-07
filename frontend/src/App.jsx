@@ -1,5 +1,6 @@
 import "./App.css";
 import MainAppLayout from "./layouts/MainLayout";
+import { AuthContextProvider } from "./context/authContext";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
   Homepage,
@@ -10,7 +11,7 @@ import {
   PageNotFound,
   Dashboard,
 } from "./pages/index";
-import { AuthContextProvider } from "./context/authContext";
+
 function App() {
   return (
     <AuthContextProvider>

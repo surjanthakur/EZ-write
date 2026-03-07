@@ -8,15 +8,18 @@ const API_URL = axios.create({
 // helper function to normalize error
 const handleApiError = (err) => {
   const status = err.response?.status || 500;
-  const data = err.response?.data ?? {};
+  const data = err.response?.data;
 
   const rawDetail = data?.detail ?? data?.message;
-
   const detail =
     typeof rawDetail === "string"
       ? rawDetail
       : Array.isArray(rawDetail)
-        ? rawDetail.map((m) => (typeof m === "string" ? m : m?.msg)).join(", ")
+        ? rawDetail
+            .map((message) =>
+              typeof message === "string" ? message : message?.msg
+            )
+            .join(", ")
         : "Something went wrong";
 
   return { ok: false, status, data, detail };
@@ -65,12 +68,6 @@ export const CurrentUser = async () => {
       data: res.data,
     };
   } catch (err) {
-    const status = err.response?.status || 500;
-    const detail = err.response?.data?.detail || "Unable to fetch user";
-    return {
-      ok: false,
-      status,
-      detail,
-    };
+    return handleApiError(err);
   }
 };
