@@ -1,16 +1,9 @@
 import Logo from "../assets/botLogo.jpeg";
-import { useEffect } from "react";
 import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
-import { UseAuth } from "../hooks/useAuth";
+import { useAuthContext } from "../context/authContext";
 
 export default function Navbar() {
-  const { CurrUser, isCurrentUser } = UseAuth();
-
-  useEffect(() => {
-    CurrUser();
-  }, []);
-
   const authItems = ["Dashboard", "Features", "About", "Editor"];
   const guestItems = ["Features", "About", "Login", "Signup"];
 

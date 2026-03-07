@@ -6,13 +6,16 @@ export const AuthContext = createContext(null);
 export const AuthContextProvider = ({ children }) => {
   const [currUser, setCurrUser] = useState(null);
   const [authLoader, setAuthLoader] = useState(true);
+  const [isCurrentUser, setIsCurrentUser] = useState(false);
 
   const get_currUser = async () => {
     try {
       const res = await CurrentUser();
       if (res.ok) {
+        setIsCurrentUser(true);
         setCurrUser(res.data);
       } else {
+        setIsCurrentUser(false);
         setCurrUser(null);
       }
       return res;
@@ -29,10 +32,14 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currUser, get_currUser, authLoader }}>
+    <AuthContext.Provider
+      value={{ currUser, get_currUser, authLoader, isCurrentUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuthContext = () => {
+  return useContext(AuthContext);
+};
