@@ -34,8 +34,7 @@ export const UseAuth = () => {
       const res = await LoginUser(data);
       const statusOk = res?.status >= 200 && res?.status < 300;
       if (!statusOk || !res?.ok) {
-        const detail =
-          res?.data?.detail || res?.data?.message || "Login failed";
+        const detail = res?.detail ?? res?.data?.message ?? "Login failed";
         setAuthError(detail);
         return { ok: false, detail };
       }

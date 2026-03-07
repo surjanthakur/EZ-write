@@ -19,7 +19,16 @@ const LoginUser = async (data) => {
   } catch (err) {
     const status = err.response?.status;
     const data = err.response?.data ?? {};
-    return { status, data, ok: false };
+    const rawDetail = data?.detail ?? data?.message;
+    const detail =
+      typeof rawDetail === "string"
+        ? rawDetail
+        : Array.isArray(rawDetail)
+          ? rawDetail
+              .map((m) => (typeof m === "string" ? m : m?.msg || m))
+              .join(", ")
+          : "Login failed";
+    return { status, data, ok: false, detail };
   }
 };
 
