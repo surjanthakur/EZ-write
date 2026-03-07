@@ -6,6 +6,7 @@ import { PenLine, Search, Menu, X } from "lucide-react";
 import { UsePosts } from "../../hooks/usePosts";
 import { useAuthContext } from "../../context/authContext";
 import { toast } from "react-hot-toast";
+import { Loader } from "../../components/index";
 
 const FILTERS = ["All", "Blog", "Article"];
 
@@ -14,8 +15,10 @@ export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [posts, setPosts] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { all_posts, error } = UsePosts();
-  const { currUser } = useAuthContext();
+  const { all_posts, error, loading } = UsePosts();
+  const { currUser, isCurrentUser } = useAuthContext();
+
+  const isLoading = loading || isCurrentUser;
 
   const safePosts = Array.isArray(posts) ? posts : [];
   const postsCount = safePosts.length;
@@ -58,6 +61,11 @@ export default function Dashboard() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/60 backdrop-blur-sm">
+          <Loader />
+        </div>
+      )}
       {/* Mobile overlay for sidebar */}
       {sidebarOpen && (
         <div
