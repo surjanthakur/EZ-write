@@ -7,8 +7,6 @@ export default function Navbar() {
   const authItems = ["Dashboard", "Features", "About", "Editor"];
   const guestItems = ["Features", "About", "Login", "Signup"];
 
-  const navItems = isCurrentUser ? authItems : guestItems;
-
   return (
     <nav
       className="fixed top-0 left-0 right-0 bg-blend-overlay z-50 
