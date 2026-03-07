@@ -28,7 +28,7 @@ export const useAuth = () => {
       if (!res.ok) {
         return res;
       }
-      get_currUser();
+      await get_currUser();
       return res;
     } finally {
       setLoading(false);

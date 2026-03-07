@@ -1,13 +1,11 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { CurrentUser } from "../services/authServices";
 
-export const AuthContext = createContext({
-  currUser: null,
-  get_currUser: () => {},
-});
+export const AuthContext = createContext(null);
 
 export const AuthContextProvider = ({ children }) => {
   const [currUser, setCurrUser] = useState(null);
+  const [authLoader, setAuthLoader] = useState(true);
 
   const get_currUser = async () => {
     try {
@@ -21,6 +19,8 @@ export const AuthContextProvider = ({ children }) => {
     } catch (error) {
       setCurrUser(null);
       throw error;
+    } finally {
+      setAuthLoader(false);
     }
   };
 
@@ -29,7 +29,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currUser, get_currUser }}>
+    <AuthContext.Provider value={{ currUser, get_currUser, authLoader }}>
       {children}
     </AuthContext.Provider>
   );
