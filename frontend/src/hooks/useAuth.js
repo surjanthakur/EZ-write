@@ -32,14 +32,18 @@ export const UseAuth = () => {
       setLoading(true);
       setAuthError(null);
       const res = await LoginUser(data);
-      if (!res) {
-        setAuthError(res?.detail || "Login failed");
-        return { ok: false, detail: res?.detail || "Login failed" };
+      const statusOk = res?.status >= 200 && res?.status < 300;
+      if (!statusOk || !res?.ok) {
+        const detail =
+          res?.data?.detail || res?.data?.message || "Login failed";
+        setAuthError(detail);
+        return { ok: false, detail };
       }
       return { ok: true, data: res };
     } catch (err) {
       const detail =
         err.response?.data?.detail ||
+        err.response?.data?.message ||
         err.message ||
         "Something went wrong. Please try again.";
       setAuthError(detail);

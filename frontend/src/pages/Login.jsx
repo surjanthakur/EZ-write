@@ -18,15 +18,14 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const res = await Login(data);
-
       if (res?.ok === false) {
-        toast.error(res.detail || "Login failed");
+        toast.error(res.detail || authError || "Login failed");
         return;
       }
       toast.success("Login successful");
       navigate("/");
     } catch (err) {
-      toast.error(err?.message || authError || "Something went wrong");
+      toast.error(authError || err?.message || "Something went wrong");
     }
   };
 
