@@ -12,7 +12,7 @@ export const UseAuth = () => {
       setLoading(true);
       setAuthError(null);
       const res = await signupUser(data);
-      if (!res || res.success === false) {
+      if (!res) {
         setAuthError(res?.detail || "Signup failed");
       }
       return res;
@@ -25,6 +25,7 @@ export const UseAuth = () => {
       setLoading(false);
     }
   };
+
   // login user hook
   const Login = async (data) => {
     try {
