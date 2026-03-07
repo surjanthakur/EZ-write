@@ -21,13 +21,15 @@ async def create_user(user_data: UserCreate, db: AsyncSession):
     user = await user_by_email(email=user_data.email, db=db)
     if user:
         raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail="user already exists!"
+            status_code=status.HTTP_409_CONFLICT, detail="user already exists"
         )
     hashed_pass = await asyncio.get_running_loop().run_in_executor(
         None, pass_hash, user_data.password
     )
     new_user = User(
-        username=user_data.username, email=user_data.email, password=hashed_pass
+        username=user_data.username,
+        email=user_data.email,
+        password=hashed_pass,
     )
     try:
         db.add(new_user)

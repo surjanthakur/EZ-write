@@ -53,6 +53,6 @@ class Post(SQLModel, table=True):
     )
     title: str = Field(..., min_length=1, max_length=255)
     content: dict = Field(sa_column=Column(JSONB))
-    created_at: datetime = Field(default_factory=datetime.utcnow)
     post_type: postType
+    created_at: datetime = Field(default_factory=datetime.utcnow)
     owner: Optional["User"] = Relationship(back_populates="posts")
