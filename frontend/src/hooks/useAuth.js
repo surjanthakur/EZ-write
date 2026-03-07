@@ -39,6 +39,5 @@ export const useAuth = () => {
     signup,
     login,
     loading,
-    authError,
   };
 };

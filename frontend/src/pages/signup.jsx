@@ -1,11 +1,11 @@
 import { PenIcon, LockIcon, ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { UseAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const { Signup, authError, loading } = UseAuth();
+  const { signup } = useAuth();
   const navigate = useNavigate();
   const {
     register,
@@ -15,20 +15,13 @@ const Signup = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    try {
-      const res = await Signup(data);
-      if (res?.success === true) {
-        setTimeout(() => {
-          navigate("/login");
-        }, 500);
-      } else if (authError) {
-        toast.error(authError);
-      }
-    } catch (err) {
-      if (authError) {
-        toast.error(authError);
-      }
+    const res = await signup(data);
+    if (!res.ok) {
+      toast.error(res.detail);
+      return;
     }
+    toast.success(res.data?.detail);
+    navigate("/login");
   };
 
   const passwordValue = watch("password");

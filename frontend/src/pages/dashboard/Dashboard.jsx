@@ -4,7 +4,7 @@ import { Header } from "./Header";
 import { PostCard } from "./PostCards";
 import { PenLine, Search, Menu, X } from "lucide-react";
 import { UsePosts } from "../../hooks/usePosts";
-import { UseAuth } from "../../hooks/useAuth";
+import { useAuthContext } from "../../context/authContext";
 import { toast } from "react-hot-toast";
 
 const FILTERS = ["All", "Blog", "Article"];
@@ -14,14 +14,13 @@ export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [posts, setPosts] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
   const { all_posts, error } = UsePosts();
-  const { CurrUser } = UseAuth();
+  const { currUser } = useAuthContext();
 
   const safePosts = Array.isArray(posts) ? posts : [];
   const postsCount = safePosts.length;
 
-  const displayName = currentUser?.username || "User";
+  const displayName = currUser?.username || "User";
 
   const avatarInitials = displayName
     .split(" ")
@@ -29,19 +28,6 @@ export default function Dashboard() {
     .join("")
     .slice(0, 2)
     .toUpperCase();
-
-  // fetch curr-user
-  const fetchCurrentUser = async () => {
-    try {
-      const res = await CurrUser();
-      if (res) {
-        setCurrentUser(res);
-      }
-    } catch (err) {
-      setCurrentUser(null);
-      console.error(err);
-    }
-  };
 
   // fetch all posts
   const fetchPosts = async () => {
@@ -58,7 +44,6 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchCurrentUser();
     fetchPosts();
   }, []);
 
