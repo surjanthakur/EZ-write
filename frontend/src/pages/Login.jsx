@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UseAuth } from "../hooks/useAuth";
 
 const Login = () => {
-  const { Login, authError, loading } = UseAuth();
+  const { Login, loading } = UseAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const fromEditor = location.state?.fromEditor;

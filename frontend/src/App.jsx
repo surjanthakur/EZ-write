@@ -10,9 +10,10 @@ import {
   PageNotFound,
   Dashboard,
 } from "./pages/index";
+import { AuthContextProvider } from "./context/authContext";
 function App() {
   return (
-    <>
+    <AuthContextProvider>
       <BrowserRouter>
         <Routes>
           <Route element={<MainAppLayout />}>
@@ -26,7 +27,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </AuthContextProvider>
   );
 }
 

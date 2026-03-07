@@ -53,8 +53,24 @@ export const loginUser = async (data) => {
     return handleApiError(err);
   }
 };
+
 // api call to get current user
 export const CurrentUser = async () => {
-  const res = await API_URL.get("/me");
-  return { status: res.status, data: res.data };
+  try {
+    const res = await API_URL.get("/me");
+
+    return {
+      ok: true,
+      status: res.status,
+      data: res.data,
+    };
+  } catch (err) {
+    const status = err.response?.status || 500;
+    const detail = err.response?.data?.detail || "Unable to fetch user";
+    return {
+      ok: false,
+      status,
+      detail,
+    };
+  }
 };
