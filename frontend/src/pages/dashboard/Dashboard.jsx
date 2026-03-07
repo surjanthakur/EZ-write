@@ -16,9 +16,9 @@ export default function Dashboard() {
   const [posts, setPosts] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { all_posts, error, loading } = UsePosts();
-  const { currUser, isCurrentUser } = useAuthContext();
+  const { currUser } = useAuthContext();
 
-  const isLoading = loading || isCurrentUser;
+  const isLoading = loading;
 
   const safePosts = Array.isArray(posts) ? posts : [];
   const postsCount = safePosts.length;
@@ -62,7 +62,7 @@ export default function Dashboard() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       {isLoading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/25 backdrop-blur-sm">
           <Loader />
         </div>
       )}
