@@ -1,30 +1,29 @@
 import logging
-from sqlite3 import dbapi2
 from uuid import UUID
 from ..db.models import Post, postType
 from ..schemas.posts import PostCreate
 from sqlmodel.ext.asyncio.session import AsyncSession
 from fastapi import status, HTTPException
 from sqlalchemy.exc import SQLAlchemyError
-from ..repository.posts_repo import get_all_posts, post_by_id
+from ..repository.posts_repo import post_by_id, get_posts_by_query
 
 logger = logging.getLogger(__name__)
 
 
-# get all posts
-async def all_posts(db: AsyncSession):
+# search posts by query
+async def search_posts(db: AsyncSession, query: str):
     try:
-        posts = await get_all_posts(db=db)
+        posts = await get_posts_by_query(db=db, query=query)
     except Exception as error:
-        logger.error(f"Failed to fetch posts: {error}")
+        logger.error(f"Failed to search posts: {error}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error fetching posts, please try again later.",
+            detail="Error searching posts, please try again later.",
         )
     if not posts:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="No posts found.",
+            detail=f"No posts found for query: '{query}'",
         )
     return posts
 

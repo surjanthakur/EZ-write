@@ -1,5 +1,5 @@
 from uuid import UUID
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Query
 from ..db.db_connection import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
 from ..schemas.posts import PostCreate
@@ -15,13 +15,15 @@ from ..service.users_service import current_user
 post_router = APIRouter(prefix="/posts", tags=["posts"])
 
 
-# all post
-@post_router.get("/all", status_code=status.HTTP_200_OK)
-async def get_all_posts(
+# posts by query
+@post_router.get("/search", status_code=status.HTTP_200_OK)
+async def search_posts_by_query(
+    query: str = Query(..., min_length=1, description="Search query for posts"),
     session_db: AsyncSession = Depends(get_session),
     curr_user: User = Depends(current_user),
 ):
-    return await all_posts(db=session_db)
+    # return await search_posts(db=session_db, query=query)
+    pass
 
 
 # get posts
