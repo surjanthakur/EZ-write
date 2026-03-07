@@ -71,3 +71,17 @@ export const CurrentUser = async () => {
     return handleApiError(err);
   }
 };
+
+// api call to logout user
+export const LogoutUser = async () => {
+  try {
+    const res = await API_URL.post("/logout");
+    return {
+      ok: true,
+      status: res.status,
+      data: res.data,
+    };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};

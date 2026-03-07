@@ -7,6 +7,9 @@ import {
   PenToolIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
   { id: "home", label: "Home", icon: Home, to: "/" },
@@ -17,6 +20,20 @@ const navItems = [
 
 // Remove TypeScript interface, add prop destructure with no types
 export function Sidebar({ activeItem, onNavChange }) {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    const res = await logout();
+    if (!res.ok) {
+      toast.error(res.detail);
+      return;
+    }
+    setTimeout(() => {
+      toast.success(res.data?.detail);
+      navigate("/");
+    }, 500);
+  };
   return (
     <aside className="w-56 min-h-screen bg-white border-r border-gray-100 flex flex-col py-8 px-4 shrink-0">
       {/* Logo */}
@@ -61,7 +78,7 @@ export function Sidebar({ activeItem, onNavChange }) {
         <div className="my-3 border-t border-gray-100" />
 
         <button
-          onClick={() => onNavChange("logout")}
+          onClick={handleLogout}
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all duration-150 w-full text-left"
         >
           <LogOut size={24} />

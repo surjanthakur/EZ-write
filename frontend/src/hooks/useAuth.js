@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signupUser, loginUser } from "../services/authServices";
+import { signupUser, loginUser, LogoutUser } from "../services/authServices";
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
@@ -32,8 +32,22 @@ export const useAuth = () => {
     }
   };
 
+  // logout
+  const logout = async () => {
+    try {
+      const res = await LogoutUser();
+      if (!res.ok) {
+        return res;
+      }
+      return res;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     signup,
+    logout,
     login,
     loading,
   };
