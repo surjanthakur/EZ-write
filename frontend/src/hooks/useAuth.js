@@ -32,6 +32,9 @@ export const UseAuth = () => {
       setLoading(true);
       setError(null);
       const res = await LoginUser(data);
+      if (!res) {
+        setAuthError(res?.detail || "Signup failed");
+      }
       return res;
     } catch (err) {
       const detail = err.response?.data?.detail || "something went wrong";
