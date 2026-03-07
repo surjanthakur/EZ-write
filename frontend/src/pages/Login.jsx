@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { Loader } from "../components/index";
 
 const Login = () => {
   const { login, loading } = useAuth();
@@ -38,6 +39,12 @@ const Login = () => {
           {fromEditor && (
             <div className="mb-4 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
               Please login to access the editor.
+            </div>
+          )}
+
+          {(loading || isSubmitting) && (
+            <div className="mb-4 flex justify-center">
+              <Loader />
             </div>
           )}
 
