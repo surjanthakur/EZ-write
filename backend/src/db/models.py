@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, Relationship, Field
 from uuid import UUID
 import uuid
 from sqlalchemy import Column
-from datetime import datetime
+from datetime import datetime, timezone
 from pydantic import field_validator
 from sqlalchemy.dialects.postgresql import JSONB
 from enum import Enum
@@ -21,7 +21,9 @@ class User(SQLModel, table=True):
     username: str = Field(unique=True, index=True, min_length=3, max_length=50)
     email: str = Field(unique=True, min_length=5, max_length=255, index=True)
     password: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+    )
     posts: Optional[List["Post"]] = Relationship(back_populates="owner")
 
     @field_validator("email")
@@ -54,5 +56,7 @@ class Post(SQLModel, table=True):
     title: str = Field(..., min_length=1, max_length=255)
     content: dict = Field(sa_column=Column(JSONB))
     post_type: postType
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+    )
     owner: Optional["User"] = Relationship(back_populates="posts")
