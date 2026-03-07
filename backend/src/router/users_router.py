@@ -37,6 +37,6 @@ async def get_current_user(curr_user: User = Depends(current_user)):
 
 
 # logout account
-@user_router.post("/logout")
+@user_router.post("/logout", status_code=status.HTTP_200_OK)
 def logout_account():
     pass
