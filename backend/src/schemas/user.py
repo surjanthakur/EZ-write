@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, EmailStr, field_validator
 from typing import List
 from .posts import PostResponse
 import re
+from datetime import datetime
 
 
 class UserCreate(BaseModel):
@@ -47,4 +48,4 @@ class currentUserResponse(BaseModel):
     username: str
     email: EmailStr
     posts: List[PostResponse] = []
-    created_at: str
+    created_at: datetime
