@@ -37,7 +37,7 @@ export function Sidebar({ activeItem, onNavChange }) {
     }, 500);
   };
   return (
-    <aside className="w-56 min-h-screen bg-white border-r border-gray-100 flex flex-col py-8 px-4 shrink-0">
+    <aside className="w-56 min-h-screen bg-white border-r border-black flex flex-col py-8 px-4 shrink-0">
       {/* Logo */}
       <div className="flex items-center gap-2 px-2 mb-10">
         <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center">
