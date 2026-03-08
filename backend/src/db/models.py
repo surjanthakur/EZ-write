@@ -21,8 +21,8 @@ class User(SQLModel, table=True):
     username: str = Field(unique=True, index=True, min_length=3, max_length=50)
     email: str = Field(unique=True, min_length=5, max_length=255, index=True)
     password: str
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+    created_at: str = Field(
+        default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
         index=True,
     )
     posts: Optional[List["Post"]] = Relationship(back_populates="owner")
@@ -58,8 +58,8 @@ class Post(SQLModel, table=True):
     title: str = Field(..., min_length=1, max_length=255)
     content: dict = Field(sa_column=Column(JSONB))
     post_type: postType = Field(index=True)
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+    created_at: str = Field(
+        default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
         index=True,
     )
     owner: Optional["User"] = Relationship(back_populates="posts")
