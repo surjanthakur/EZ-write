@@ -6,9 +6,11 @@ import {
   post_By_Id,
 } from "../services/postServices";
 
+// Custom hook for managing post-related operations
 export const UsePosts = () => {
   const [loading, setLoading] = useState(false);
 
+  // Fetches posts based on post type
   const fetch_posts = async (data) => {
     setLoading(true);
     try {
@@ -22,6 +24,7 @@ export const UsePosts = () => {
     }
   };
 
+  // Creates a new post
   const create_post = async (data) => {
     try {
       const res = await createPost(data);
@@ -34,6 +37,7 @@ export const UsePosts = () => {
     }
   };
 
+  // Gets a post by its ID
   const get_post = async (post_id) => {
     try {
       const res = await deletePost(post_id);
@@ -45,6 +49,8 @@ export const UsePosts = () => {
       setLoading(false);
     }
   };
+
+  // Deletes a post by its ID
   const delete_post = async (post_id) => {
     try {
       const res = await post_By_Id(post_id);
