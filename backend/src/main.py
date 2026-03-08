@@ -22,7 +22,7 @@ origins = ["http://localhost:5173"]
 
 
 # cors middleware ------------>
-@app.add_middleware(
+app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
@@ -32,7 +32,9 @@ origins = ["http://localhost:5173"]
 
 
 # logging middleware ------------->
-@app.middleware("http")
+app.middleware("http")
+
+
 async def log_requests(request: Request, call_next):
     start = time.time()
     response = await call_next(request)

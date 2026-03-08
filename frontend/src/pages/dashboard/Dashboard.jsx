@@ -42,7 +42,7 @@ export default function Dashboard() {
       }
     };
     loadPosts();
-  }, [activeFilter, fetch_posts]);
+  }, [activeFilter]);
 
   return (
     <div className="flex min-h-screen bg-gray-50">
