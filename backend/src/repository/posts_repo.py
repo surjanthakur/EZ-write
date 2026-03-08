@@ -7,11 +7,10 @@ from uuid import UUID
 
 # get posts by search query for current user
 async def get_posts_by_query(db: AsyncSession, query: str, user_id: UUID):
-    result = await db.exec(
-        select(Post)
-        .where(Post.user_id == user_id, Post.post_type == query)
-        .order_by(Post.created_at.desc())
-    )
+    stmt = select(Post).where(Post.user_id == user_id)
+    if query != "all":
+        stmt = stmt.where(Post.post_type == query)
+    result = await db.exec(stmt.order_by(Post.created_at.desc()))
     return result.all()
 
 

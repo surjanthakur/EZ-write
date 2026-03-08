@@ -5,19 +5,64 @@ const API_URL = axios.create({
   withCredentials: true,
 });
 
-const get_all_posts = async () => {
-  const res = await API_URL.get("/all");
-  return res.data;
+const handleApiError = (err) => {
+  const status = err.response?.status || 500;
+  const data = err.response?.data;
+  const rawDetail = data?.detail ?? data?.message;
+  const detail =
+    typeof rawDetail === "string"
+      ? rawDetail
+      : Array.isArray(rawDetail)
+        ? rawDetail
+            .map((message) =>
+              typeof message === "string" ? message : message?.msg
+            )
+            .join(", ")
+        : "Something went wrong";
+
+  return { ok: false, status, data, detail };
+};
+
+const posts_by_post_type = async (data) => {
+  try {
+    const res = await API_URL.get("/search", { params: data });
+    return {
+      ok: true,
+      data: res.data,
+      status: res.status,
+      detail: null,
+    };
+  } catch (error) {
+    return handleApiError(error);
+  }
 };
 
 const createPost = async (data) => {
-  const res = await API_URL.post("/newStory", data);
-  return res.data;
+  try {
+    const res = await API_URL.post("/newStory", data);
+    return {
+      ok: true,
+      data: res.data,
+      status: res.status,
+      detail: null,
+    };
+  } catch (error) {
+    return handleApiError(error);
+  }
 };
 
 const deletePost = async (post_id) => {
-  const res = await API_URL.delete(`/${post_id}`);
-  return res.data;
+  try {
+    const res = await API_URL.delete(`/${post_id}`);
+    return {
+      ok: true,
+      data: res.data,
+      status: res.status,
+      detail: null,
+    };
+  } catch (error) {
+    return handleApiError(error);
+  }
 };
 
-export { createPost, deletePost, get_all_posts };
+export { createPost, deletePost, posts_by_post_type };

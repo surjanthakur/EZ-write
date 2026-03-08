@@ -8,14 +8,14 @@ import { useAuthContext } from "../../context/authContext";
 import { toast } from "react-hot-toast";
 import { Loader } from "../../components/index";
 
-const FILTERS = ["All", "Blog", "Article"];
+const FILTERS = ["all", "blog", "article"];
 
 export default function Dashboard() {
   const [activeNav, setActiveNav] = useState("home");
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [activeFilter, setActiveFilter] = useState("all");
   const [posts, setPosts] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { all_posts, error, loading } = UsePosts();
+  const { fetch_posts, loading } = UsePosts();
   const { currUser } = useAuthContext();
 
   const isLoading = loading;
@@ -32,32 +32,17 @@ export default function Dashboard() {
     .slice(0, 2)
     .toUpperCase();
 
-  // fetch all posts
-  const fetchPosts = async () => {
-    try {
-      const res = await all_posts();
-      if (res) {
-        setPosts(Array.isArray(res) ? res : []);
-      }
-    } catch (err) {
-      toast.error(error);
-      console.error(err);
-      setPosts([]);
-    }
-  };
-
   useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  // --- Handlers ---
-  const handleDelete = (id) => {
-    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
-  };
-
-  const handleEdit = (id) => {
-    alert(`Edit post #${id}`);
-  };
+    const loadPosts = async () => {
+      const result = await fetch_posts({ query: activeFilter });
+      if (result.ok) {
+        setPosts(result.data);
+      } else {
+        toast.error(result.detail || "Failed to fetch posts");
+      }
+    };
+    loadPosts();
+  }, [activeFilter, fetch_posts]);
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -168,14 +153,7 @@ export default function Dashboard() {
           {/* Post Cards */}
           <div className="space-y-3">
             {safePosts.length > 0 ? (
-              safePosts.map((post, idx) => (
-                <PostCard
-                  key={idx}
-                  post={post}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                />
-              ))
+              safePosts.map((post, idx) => <PostCard key={idx} post={post} />)
             ) : (
               <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
                 <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-3">
