@@ -48,13 +48,13 @@ async def get_single_post(post_id: UUID, db: AsyncSession):
 
 # create new post
 async def create_post(post_data: PostCreate, user_id: UUID, db: AsyncSession) -> Post:
+    new_post = Post(
+        user_id=user_id,
+        title=post_data.title,
+        content=post_data.content,
+        post_type=postType(post_data.post_type.value),
+    )
     try:
-        new_post = Post(
-            user_id=user_id,
-            title=post_data.title,
-            content=post_data.content,
-            post_type=postType(post_data.post_type.value),
-        )
         db.add(new_post)
         await db.commit()
         await db.refresh(new_post)
