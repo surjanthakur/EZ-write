@@ -52,10 +52,11 @@ class Post(SQLModel, table=True):
         foreign_key="user.user_id",
         nullable=False,
         ondelete="CASCADE",
+        index=True,
     )
     title: str = Field(..., min_length=1, max_length=255)
     content: dict = Field(sa_column=Column(JSONB))
-    post_type: postType
+    post_type: postType = Field(index=True)
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
     )
