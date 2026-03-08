@@ -3,6 +3,7 @@ import {
   createPost,
   posts_by_post_type,
   deletePost,
+  post_By_Id,
 } from "../services/postServices";
 
 export const UsePosts = () => {
@@ -32,7 +33,8 @@ export const UsePosts = () => {
       setLoading(false);
     }
   };
-  const delete_post = async (post_id) => {
+
+  const get_post = async (post_id) => {
     try {
       const res = await deletePost(post_id);
       if (!res.ok) {
@@ -43,6 +45,17 @@ export const UsePosts = () => {
       setLoading(false);
     }
   };
+  const delete_post = async (post_id) => {
+    try {
+      const res = await post_By_Id(post_id);
+      if (!res.ok) {
+        return res;
+      }
+      return res;
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  return { fetch_posts, loading, delete_post, create_post };
+  return { fetch_posts, loading, delete_post, create_post, get_post };
 };

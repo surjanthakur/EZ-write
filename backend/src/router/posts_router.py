@@ -26,7 +26,7 @@ async def search_posts_by_query(
 
 
 # get posts
-@post_router.get("/{post_id}", status_code=status.HTTP_200_OK)
+@post_router.get("/view/{post_id}", status_code=status.HTTP_200_OK)
 async def get_posts(
     post_id: UUID,
     session_db: AsyncSession = Depends(get_session),

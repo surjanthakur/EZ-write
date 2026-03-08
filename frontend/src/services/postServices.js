@@ -51,6 +51,20 @@ const createPost = async (data) => {
   }
 };
 
+const post_By_Id = async (post_id) => {
+  try {
+    const res = await API_URL.delete(`view/${post_id}`);
+    return {
+      ok: true,
+      data: res.data,
+      status: res.status,
+      detail: null,
+    };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
 const deletePost = async (post_id) => {
   try {
     const res = await API_URL.delete(`delete/${post_id}`);
@@ -65,4 +79,4 @@ const deletePost = async (post_id) => {
   }
 };
 
-export { createPost, deletePost, posts_by_post_type };
+export { createPost, deletePost, posts_by_post_type, post_By_Id };
