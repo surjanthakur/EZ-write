@@ -30,7 +30,18 @@ export function PostCard({ post, onDelete }) {
                 {post.post_type}
               </span>
             </div>
-            <p className="text-xs text-gray-400 mt-0.5">{post.created_at}</p>
+            {/* time format */}
+            <p className="text-xs text-gray-400 mt-0.5">
+              {(() => {
+                if (!post.created_at) return "";
+                const d = new Date(post.created_at);
+                if (isNaN(d.getTime())) return post.created_at;
+                return d.toLocaleString(undefined, {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                });
+              })()}
+            </p>
             <p className="text-sm text-gray-500 mt-1.5 line-clamp-2 leading-relaxed">
               {(() => {
                 if (
