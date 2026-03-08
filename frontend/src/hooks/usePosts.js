@@ -21,5 +21,28 @@ export const UsePosts = () => {
     }
   };
 
-  return { fetch_posts, loading };
+  const create_post = async (data) => {
+    try {
+      const res = await createPost(data);
+      if (!res.ok) {
+        return res;
+      }
+      return res;
+    } finally {
+      setLoading(false);
+    }
+  };
+  const delete_post = async (post_id) => {
+    try {
+      const res = await deletePost(post_id);
+      if (!res.ok) {
+        return res;
+      }
+      return res;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { fetch_posts, loading, delete_post, create_post };
 };

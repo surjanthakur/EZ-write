@@ -53,7 +53,7 @@ const createPost = async (data) => {
 
 const deletePost = async (post_id) => {
   try {
-    const res = await API_URL.delete(`/${post_id}`);
+    const res = await API_URL.delete(`delete/${post_id}`);
     return {
       ok: true,
       data: res.data,
