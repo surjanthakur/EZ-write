@@ -12,6 +12,15 @@ export default function PostPage() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const displayName = currUser?.username || "User";
+
+  const avatarInitials = displayName
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -48,14 +57,13 @@ export default function PostPage() {
       {/* Author Section */}
       <div className="flex items-center justify-between border-b pb-4">
         <div className="flex items-center gap-3">
-          <img
-            src={post.author_avatar || "https://via.placeholder.com/40"}
-            alt="author"
-            className="w-10 h-10 rounded-full"
-          />
-
+          <div className="w-9 h-9 rounded-full bg-black">
+            <span className="text-white text-xs font-semibold">
+              {avatarInitials}
+            </span>
+          </div>
           <div className="text-sm">
-            <p className="font-semibold">{post.author_name}</p>
+            <p className="font-semibold">{displayName}</p>
             <p className="text-gray-500 text-xs">
               {post.read_time} min read · {post.created_at}
             </p>
