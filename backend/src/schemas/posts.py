@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from enum import Enum
+from uuid import UUID
 
 
 class PostType(str, Enum):
@@ -17,6 +18,7 @@ class PostCreate(BaseModel):
 
 # Response model for a single post
 class PostResponse(BaseModel):
+    post_id: UUID
     title: str
     content: dict
     post_type: PostType

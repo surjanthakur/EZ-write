@@ -1,7 +1,16 @@
 import { Pencil, Trash2 } from "lucide-react";
 import PostImage from "../../assets/soft-cartoon.jpeg";
+import { UsePosts } from "../../hooks/usePosts";
 
 export function PostCard({ post }) {
+  const { delete_post } = UsePosts();
+
+  const handle_delete = async () => {
+    if (post && post.post_id) {
+      await delete_post(post.id);
+    }
+  };
+
   const typeBadgeColors = {
     blog: "bg-violet-100 text-violet-600",
     article: "bg-amber-100 text-amber-600",

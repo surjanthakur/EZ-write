@@ -2,7 +2,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status, Query
 from ..db.db_connection import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
-from ..schemas.posts import PostCreate
+from ..schemas.posts import PostCreate, PostResponse
 from ..service.posts_service import (
     create_post,
     search_posts,
@@ -16,7 +16,7 @@ post_router = APIRouter(prefix="/posts", tags=["posts"])
 
 
 # posts by query
-@post_router.get("/search", status_code=status.HTTP_200_OK)
+@post_router.get("/search", status_code=status.HTTP_200_OK, response_model=PostResponse)
 async def search_posts_by_query(
     query: str = Query(..., min_length=1, description="Search query for posts"),
     session_db: AsyncSession = Depends(get_session),
