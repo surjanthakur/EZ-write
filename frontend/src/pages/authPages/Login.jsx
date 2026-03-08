@@ -2,9 +2,9 @@ import { LockIcon, PenIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { Loader } from "../components/index";
-import { useAuthContext } from "../context/authContext";
+import { useAuth } from "../../hooks/useAuth";
+import { Loader } from "../../components/index";
+import { useAuthContext } from "../../context/authContext";
 
 const Login = () => {
   const { login, loading } = useAuth();
