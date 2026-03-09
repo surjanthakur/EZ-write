@@ -6,30 +6,32 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from fastapi import status, HTTPException
 from sqlalchemy.exc import SQLAlchemyError
 from ..repository.posts_repo import post_by_id, get_posts_by_query
+from ..db.models import Post
 
 logger = logging.getLogger(__name__)
 
 
 # search posts by query
-async def search_posts(db: AsyncSession, query: str, user_id: UUID):
+async def search_posts(db: AsyncSession, query: str, user_id: UUID) -> Post:
     try:
         posts = await get_posts_by_query(db=db, query=query, user_id=user_id)
+        if not posts:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"No posts found for query: '{query}'",
+            )
     except Exception as error:
+        await db.rollback()
         logger.error(f"Failed to search posts: {error}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error searching posts, please try again later.",
         )
-    if not posts:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"No posts found for query: '{query}'",
-        )
     return posts
 
 
 # create new post
-async def create_post(post_data: PostCreate, user_id: UUID, db: AsyncSession) -> Post:
+async def create_post(post_data: PostCreate, user_id: UUID, db: AsyncSession) -> dict:
     new_post = Post(
         user_id=user_id,
         title=post_data.title,
@@ -51,7 +53,7 @@ async def create_post(post_data: PostCreate, user_id: UUID, db: AsyncSession) ->
 
 
 # delete post
-async def delete_post_by_id(post_id: UUID, db: AsyncSession, user_id: UUID):
+async def delete_post_by_id(post_id: UUID, db: AsyncSession, user_id: UUID) -> dict:
     try:
         post = await post_by_id(post_id=post_id, db=db)
         if not post:
