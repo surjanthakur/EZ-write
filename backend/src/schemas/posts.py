@@ -12,7 +12,7 @@ class PostType(str, Enum):
 # Request model for creating a new post
 class PostCreate(BaseModel):
     title: str
-    content: dict
+    content: str
     post_type: PostType
 
 
@@ -20,7 +20,7 @@ class PostCreate(BaseModel):
 class PostResponse(BaseModel):
     post_id: UUID
     title: str
-    content: dict
+    content: str
     post_type: PostType
     created_at: datetime
 
