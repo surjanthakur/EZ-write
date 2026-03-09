@@ -6,6 +6,7 @@ import { BubbleMenu } from "@tiptap/react/menus";
 import BubbleMenuExtension from "@tiptap/extension-bubble-menu";
 import { UsePosts } from "../hooks/usePosts";
 import StarterKit from "@tiptap/starter-kit";
+import { Loader } from "../components/index";
 import {
   ArrowLeft,
   Bold,
@@ -21,7 +22,7 @@ export default function WritingPageEditor() {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [postType, setPostType] = useState("blog");
-  const { create_post } = UsePosts();
+  const { create_post, loading } = UsePosts();
 
   const editor = useEditor({
     extensions: [
@@ -52,6 +53,10 @@ export default function WritingPageEditor() {
       navigate("/dashboard");
     }, 500);
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="min-h-screen bg-zinc-100 flex justify-center">
