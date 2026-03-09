@@ -3,22 +3,13 @@ import { useNavigate } from "react-router-dom";
 import PostImage from "../../assets/soft-cartoon.jpeg";
 
 export function PostCard({ post, onDelete }) {
-  const navigate = useNavigate();
-
   const typeBadgeColors = {
     blog: "bg-violet-100 text-violet-600",
     article: "bg-amber-100 text-amber-600",
   };
 
-  const handleCardClick = () => {
-    navigate(`/post/${post.post_id}`);
-  };
-
   return (
-    <div
-      className="flex gap-5 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition-shadow duration-200 group cursor-pointer"
-      onClick={handleCardClick}
-    >
+    <div className="flex gap-5 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition-shadow duration-200 group cursor-pointer">
       {/* Thumbnail */}
       <div className="shrink-0 w-28 h-28 rounded-xl overflow-hidden bg-gray-100">
         <img
