@@ -2,17 +2,11 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { BubbleMenu } from "@tiptap/react/menus";
+import ToolBar from "./ToolBar";
 import BubbleMenuExtension from "@tiptap/extension-bubble-menu";
-import { UsePosts } from "../hooks/usePosts";
+import { UsePosts } from "../../hooks/usePosts";
 import StarterKit from "@tiptap/starter-kit";
-import {
-  ArrowLeft,
-  Bold,
-  Italic,
-  Strikethrough,
-  Underline as UnderlineIcon,
-} from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./css/editor.css";
@@ -34,15 +28,15 @@ export default function WritingPageEditor() {
     content: "",
   });
 
+  const postData = {
+    title: title,
+    post_type: postType,
+    content: editor.getHTML(),
+  };
+
+  // to save content
   const handleSave = async () => {
     if (!editor) return;
-
-    const postData = {
-      title,
-      post_type: postType,
-      content: editor.getHTML(),
-    };
-    console.log(postData);
     const res = await create_post(postData);
     if (!res.ok) {
       toast.error(res.detail);
@@ -70,8 +64,7 @@ export default function WritingPageEditor() {
         {/* Title */}
         <input
           type="text"
-          placeholder="Title"
-          required
+          placeholder="Give your story an inspiring title..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full text-5xl font-serif font-semibold bg-transparent outline-none mb-2"
@@ -79,46 +72,7 @@ export default function WritingPageEditor() {
 
         {/* Editor */}
         <div className="mt-6 editor-wrapper">
-          {editor && (
-            <BubbleMenu
-              editor={editor}
-              tippyOptions={{ duration: 100 }}
-              className="editor-bubble-menu"
-            >
-              <button
-                type="button"
-                onClick={() => editor.chain().focus().toggleBold().run()}
-                className={`editor-bubble-btn ${editor.isActive("bold") ? "is-active" : ""}`}
-                title="Bold"
-              >
-                <Bold size={18} />
-              </button>
-              <button
-                type="button"
-                onClick={() => editor.chain().focus().toggleItalic().run()}
-                className={`editor-bubble-btn ${editor.isActive("italic") ? "is-active" : ""}`}
-                title="Italic"
-              >
-                <Italic size={18} />
-              </button>
-              <button
-                type="button"
-                onClick={() => editor.chain().focus().toggleStrike().run()}
-                className={`editor-bubble-btn ${editor.isActive("strike") ? "is-active" : ""}`}
-                title="Strikethrough"
-              >
-                <Strikethrough size={18} />
-              </button>
-              <button
-                type="button"
-                onClick={() => editor.chain().focus().toggleUnderline().run()}
-                className={`editor-bubble-btn ${editor.isActive("underline") ? "is-active" : ""}`}
-                title="Underline"
-              >
-                <UnderlineIcon size={18} />
-              </button>
-            </BubbleMenu>
-          )}
+          {editor && <ToolBar editor={editor} />}
           <EditorContent editor={editor} className="ProseMirror" />
         </div>
 
