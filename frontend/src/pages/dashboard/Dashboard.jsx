@@ -32,7 +32,7 @@ export default function Dashboard() {
     .slice(0, 2)
     .toUpperCase();
 
-  // func to delete post
+  // func to delete post and refresh posts after deletion
   const handle_delete = async (post_id) => {
     const res = await delete_post(post_id);
     if (!res.ok) {
@@ -40,6 +40,11 @@ export default function Dashboard() {
       return;
     }
     toast.success(res.data?.detail);
+    // Refresh posts with the current filter
+    const result = await fetch_posts({ query: activeFilter });
+    if (result.ok) {
+      setPosts(result.data);
+    }
   };
 
   useEffect(() => {
