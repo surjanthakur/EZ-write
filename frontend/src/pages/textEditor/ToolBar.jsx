@@ -11,11 +11,7 @@ import "../css/editor.css";
 export default function ToolBar({ editor }) {
   return (
     <>
-      <BubbleMenu
-        editor={editor}
-        tippyOptions={{ duration: 100 }}
-        className="editor-bubble-menu"
-      >
+      <BubbleMenu editor={editor} className="editor-bubble-menu">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
