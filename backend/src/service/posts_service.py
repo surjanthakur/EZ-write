@@ -129,6 +129,7 @@ async def delete_post_by_id(post_id: UUID, db: AsyncSession, user_id: UUID) -> d
         )
 
 
+#! download post as a PDF
 async def download_post_as_pdf(post_id: UUID, db: AsyncSession):
     post = await post_by_id(post_id=post_id, db=db)
     if not post:
