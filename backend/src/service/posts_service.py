@@ -16,14 +16,12 @@ async def search_posts(db: AsyncSession, query: str, user_id: UUID) -> Post:
     try:
         # Step 1: Use the posts repository to find posts matching the query and user ID
         posts = await get_posts_by_query(db=db, query=query, user_id=user_id)
-
         # Step 2: If no posts are found, raise a 404 Not Found HTTPException
         if not posts:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"No posts found for query: '{query}'",
             )
-
         # Step 3: Return the list of found posts
         return posts
 

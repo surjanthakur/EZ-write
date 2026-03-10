@@ -24,7 +24,11 @@ settings = Settings()
 async_engine: AsyncEngine = create_async_engine(
     settings.DB_URL,
     echo=False,
-    connect_args={"timeout": 60, "ssl": True},
+    pool_size=5,
+    max_overflow=10,
+    pool_recycle=1800,
+    pool_timeout=30,
+    connect_args={"ssl": True},
 )
 
 # session factory for managing database sessions
