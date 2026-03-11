@@ -1,5 +1,5 @@
-from weasyprint import HTML
-import tempfile
+import pdfkit
+from io import BytesIO
 
 
 def generate_post_pdf(post_data):
@@ -18,14 +18,15 @@ def generate_post_pdf(post_data):
             </style>
         </head>
         <body>
-            <h1>{post.title}</h1>
-            {post.content}
+            <h1>{post_data.title}</h1>
+            {post_data.content}
         </body>
     </html>
     """
 
-    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+    pdf = pdfkit.from_string(html_template, False)
 
-    HTML(string=html_template).write_pdf(temp_file.name)
+    buffer = BytesIO(pdf)
+    buffer.seek(0)
 
-    return temp_file.name
+    return buffer
