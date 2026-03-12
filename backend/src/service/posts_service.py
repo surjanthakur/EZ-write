@@ -89,8 +89,15 @@ async def get_post_by_id(post_id: UUID, db: AsyncSession):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="post not found!"
             )
+    except SQLAlchemyError as err:
+        await db.rollback()
+        logging.error(f"fething post failed for id {post_id} : => {err}")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Something went wrong, please try again!",
+        )
     except Exception as err:
-        db.rollback()
+        await db.rollback()
         logger.error(f"unexpected error in fetching post: {post_id} :=> {err}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
