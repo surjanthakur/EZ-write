@@ -7,9 +7,6 @@ from fastapi import status, HTTPException
 from sqlalchemy.exc import SQLAlchemyError
 from ..repository.posts_repo import post_by_id, get_posts_by_query
 from ..db.models import Post
-from .pdf_service import generate_post_pdf
-from fastapi.responses import FileResponse
-import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -126,38 +123,4 @@ async def delete_post_by_id(post_id: UUID, db: AsyncSession, user_id: UUID) -> d
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred while deleting the post. Please try again later.",
-        )
-
-
-# ? download post as a PDF
-async def download_post_as_pdf(post_id: UUID, db: AsyncSession):
-    try:
-        post = await post_by_id(post_id=post_id, db=db)
-        if not post:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="post not found"
-            )
-        loop = asyncio.get_running_loop()
-        pdf_path = await loop.run_in_executor(None, generate_post_pdf, post)
-        return FileResponse(
-            path=pdf_path,
-            status_code=200,
-            media_type="application/pdf",
-            filename=f"{post.title}.pdf",
-        )
-    except SQLAlchemyError as error:
-        logger.error(
-            f"SQLAlchemyError while downloading PDF for post {post_id}: {error}"
-        )
-        await db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="A database error occurred while preparing the post PDF. Please try again later.",
-        )
-    except Exception as error:
-        logger.error(f"Failed to generate/download PDF for post {post_id}: {error}")
-        await db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An error occurred while downloading the PDF. Please try again later.",
         )
