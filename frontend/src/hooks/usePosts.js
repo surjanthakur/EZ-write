@@ -3,7 +3,6 @@ import {
   createPost,
   posts_by_post_type,
   deletePost,
-  downloadPDF,
 } from "../services/postServices";
 
 // Custom hook for managing post-related operations
@@ -50,18 +49,5 @@ export const UsePosts = () => {
     }
   };
 
-  // download post as pdf format
-  const download_as_pdf = async (post_id) => {
-    try {
-      const res = await downloadPDF(post_id);
-      if (!res.ok) {
-        return res;
-      }
-      return res;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { fetch_posts, loading, delete_post, create_post, download_as_pdf };
+  return { fetch_posts, loading, delete_post, create_post };
 };
