@@ -85,4 +85,4 @@ const deletePost = async (post_id) => {
   }
 };
 
-export { createPost, deletePost, posts_by_post_type };
+export { createPost, deletePost, posts_by_post_type, post_by_id };
