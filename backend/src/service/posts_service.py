@@ -81,7 +81,7 @@ async def create_post(post_data: PostCreate, user_id: UUID, db: AsyncSession) ->
         )
 
 
-# get post
+# ? get post by ID
 async def get_post_by_id(post_id: UUID, db: AsyncSession):
     try:
         post = await get_post_by_id(post_id=post_id, db=db)
