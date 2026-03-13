@@ -1,13 +1,37 @@
 import { User, Clock, BookOpen, Download } from "lucide-react";
 import { UsePosts } from "../hooks/usePosts";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { Loader } from "../components/index";
+import { useAuthContext } from "../context/authContext";
 
 export default function PostPageView() {
+  const params = useParams();
   const Navigate = useNavigate();
+  const { currUser } = useAuthContext();
   const { get_post, loading } = UsePosts();
   const [postData, setPostData] = useState([]);
+
+  const post_username = currUser ? currUser.username : "undefined";
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const res = await get_post(params.post_id);
+        if (!res.ok) {
+          toast.error(res.detail);
+          return;
+        }
+
+        setPostData(res.data);
+      } catch (err) {
+        toast.error("Something went wrong? try again!");
+        console.error(err);
+      }
+    };
+    fetchPost();
+  }, [params.post_id]);
 
   return (
     <div className="min-h-screen bg-white font-serif">
@@ -20,20 +44,20 @@ export default function PostPageView() {
             <span className="flex items-center gap-1.5">
               <User size={13} strokeWidth={1.5} className="text-gray-300" />
               <span className="text-gray-600 font-sans font-medium">
-                {/* {post.author} */}
+                {post_username}
               </span>
             </span>
 
             {/* Date */}
             <span className="flex items-center gap-1.5">
               <Clock size={13} strokeWidth={1.5} className="text-gray-300" />
-              {/* <span className="font-sans">{post.created_at}</span> */}
+              <span className="font-sans">{postData.created_at}</span>
             </span>
 
             {/* Post type */}
             <span className="flex items-center gap-1.5">
               <BookOpen size={13} strokeWidth={1.5} className="text-gray-300" />
-              {/* <span className="font-sans">{formatType(post.post_type)}</span> */}
+              <span className="font-sans">{postData.post_type}</span>
             </span>
           </div>
 
@@ -49,16 +73,16 @@ export default function PostPageView() {
 
         {/* Title */}
         <h1 className="text-3xl font-bold text-gray-900 leading-snug mb-10 tracking-tight">
-          {/* {post.title} */}
+          {postData.title}
         </h1>
 
         {/* Content */}
         <div className="space-y-6">
-          {/* {post.content.split("\n\n").map((para, i) => (
+          {postData.content.split("\n\n").map((para, i) => (
             <p key={i} className="text-gray-700 text-base leading-relaxed">
               {para}
             </p>
-          ))} */}
+          ))}
         </div>
       </div>
     </div>
