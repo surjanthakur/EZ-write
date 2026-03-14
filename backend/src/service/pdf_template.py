@@ -60,8 +60,8 @@ body {{
 }}
 
 .divider {{
-    width:60px;
-    height:2px;
+    width:660px;
+    height:1px;
     background:#111;
     margin-bottom:32px;
 }}
