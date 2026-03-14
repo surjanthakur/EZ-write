@@ -8,8 +8,10 @@ from fastapi.responses import FileResponse
 from sqlalchemy.exc import SQLAlchemyError
 from ..repository.posts_repo import post_by_id, get_posts_by_query
 from ..db.models import Post
+from .pdf_template import pdf_template_structure
 from playwright.async_api import async_playwright
 import tempfile
+
 
 logger = logging.getLogger(__name__)
 
@@ -155,7 +157,7 @@ async def delete_post_by_id(post_id: UUID, db: AsyncSession, user_id: UUID) -> d
 
 
 # generate pdf from post
-async def generate_pdf_from_html(post_id: UUID, db: AsyncSession):
+async def generate_pdf_from_html(post_id: UUID, db: AsyncSession, curr_username: str):
     try:
         post = await post_by_id(post_id=post_id, db=db)
         if not post:
@@ -163,31 +165,34 @@ async def generate_pdf_from_html(post_id: UUID, db: AsyncSession):
                 status_code=status.HTTP_404_NOT_FOUND, detail="post not found!"
             )
 
-        html_template = f"""
-        <html>
-        <body>
-            <h1>{post.title}</h1>
-            <div>{post.content}</div>
-        </body>
-        </html>
-        """
+        html_template = pdf_template_structure(
+            post_content=post.content,
+            post_title=post.title,
+            post_type=post.post_type,
+            post_created_fmt=post.created_at.strftime("%-d-%b-%Y"),
+            post_user=curr_username,
+        )
 
         temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
         pdf_path = temp_file.name
+        temp_file.close()
+
         async with async_playwright() as playwrite:
             browser = await playwrite.chromium.launch()
             pdf_page = await browser.new_page()
-            await pdf_page.set_content(html=html_template)
+
+            await pdf_page.set_content(html=html_template, wait_until="networkidle")
             await pdf_page.pdf(path=pdf_path, format="A4", print_background=True)
             await browser.close()
 
         return FileResponse(
             path=pdf_path,
             status_code=200,
-            media_type="application/json",
-            filename=f"{post.post_id}.pdf",
+            media_type="application/pdf",
+            filename=f"{post_file_name}.pdf",
         )
-
+    except HTTPException:
+        raise
     except Exception as err:
         await db.rollback()
         logger.error(f"unexpected error accour while generating pdf:=> {err}")
