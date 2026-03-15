@@ -1,4 +1,4 @@
-import { Trash2 } from "lucide-react";
+import { Trash2, DownloadIcon } from "lucide-react";
 import PostImage from "../../assets/soft-cartoon.jpeg";
 import { Link } from "react-router-dom";
 
@@ -61,6 +61,14 @@ export function PostCard({ post, onDelete }) {
 
               {/* Actions with Popup */}
               <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 relative">
+                <button
+                  type="button"
+                  className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-green-50 hover:text-green-500 flex items-center justify-center text-gray-400 transition-colors"
+                >
+                  {" "}
+                  <DownloadIcon size={14} />
+                </button>
+
                 <button
                   onClick={onDelete}
                   className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-red-50 hover:text-red-500 flex items-center justify-center text-gray-400 transition-colors"

@@ -16,7 +16,6 @@ const navItems = [
   { id: "home", label: "Home", icon: Home, to: "/" },
   { id: "write", label: "Write", icon: PenLine, to: "/editor" },
   { id: "about", label: "About", icon: Info, to: "/about" },
-  { id: "settings", label: "Settings", icon: Settings, to: "/settings" },
 ];
 
 export function Sidebar({ activeItem, onNavChange }) {
