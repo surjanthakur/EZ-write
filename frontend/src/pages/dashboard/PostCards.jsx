@@ -37,9 +37,9 @@ export function PostCard({ post, onDelete }) {
                 <p className="text-xs text-gray-400 mt-0.5">
                   {(() => {
                     if (!post.created_at) return "";
-                    const d = new Date(post.created_at);
-                    if (isNaN(d.getTime())) return post.created_at;
-                    return d.toLocaleString(undefined, {
+                    const date = new Date(post.created_at);
+                    if (isNaN(date.getTime())) return post.created_at;
+                    return date.toLocaleString(undefined, {
                       dateStyle: "medium",
                       timeStyle: "short",
                     });
