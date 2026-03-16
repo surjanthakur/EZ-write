@@ -4,10 +4,7 @@ import { useForm } from "react-hook-form";
 import "../css/chatwindow.css";
 
 export default function ChatWindow({ isOpen, onClose }) {
-  const [messages, setMessages] = useState([
-    { id: 1, type: "ai", text: "Hello! How can I help you today?" },
-    { id: 2, type: "user", text: "I have a question about your services." },
-  ]);
+  const [messages, setMessages] = useState([]);
 
   const { register, handleSubmit, reset } = useForm();
   const messagesEndRef = useRef(null);
@@ -21,20 +18,7 @@ export default function ChatWindow({ isOpen, onClose }) {
   }, [messages, isOpen]);
 
   // handle submit
-  const onSubmit = (data) => {
-    if (data.message && data.message.trim()) {
-      // Add user message
-      const userMessage = {
-        id: Date.now(),
-        type: "user",
-        text: data.message.trim(),
-      };
-      console.log(userMessage);
-      setMessages((prev) => [...prev, userMessage]);
-
-      reset();
-    }
-  };
+  const onSubmit = (data) => {};
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
