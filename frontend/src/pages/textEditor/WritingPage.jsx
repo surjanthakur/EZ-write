@@ -1,15 +1,17 @@
 import Placeholder from "@tiptap/extension-placeholder";
-import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import { EditorContent, useEditor } from "@tiptap/react";
-import ToolBar from "./ToolBar.jsx";
 import BubbleMenuExtension from "@tiptap/extension-bubble-menu";
-import { UsePosts } from "../../hooks/usePosts.js";
-import ChatWindow from "./ChatWindow.jsx";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { ArrowLeft } from "lucide-react";
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+
+import ToolBar from "./ToolBar.jsx";
+import ChatWindow from "./ChatWindow.jsx";
+import { UsePosts } from "../../hooks/usePosts.js";
 
 export default function WritingPageEditor() {
   const navigate = useNavigate();

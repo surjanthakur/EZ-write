@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { X, User, Bot, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
+
 import "../css/chatwindow.css";
 
 export default function ChatWindow({ isOpen, onClose }) {
@@ -20,14 +21,14 @@ export default function ChatWindow({ isOpen, onClose }) {
   // handle submit
   const onSubmit = (data) => {};
 
+  if (!isOpen) return null;
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(onSubmit)();
     }
   };
-
-  if (!isOpen) return null;
 
   return (
     <>
