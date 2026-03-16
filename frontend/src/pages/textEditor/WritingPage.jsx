@@ -57,6 +57,7 @@ export default function WritingPageEditor() {
             className="inline-flex items-center text-black hover:opacity-70 transition"
           >
             <ArrowLeft size={28} />
+            Back
           </Link>
         </div>
 
@@ -92,7 +93,7 @@ export default function WritingPageEditor() {
           {/* save button */}
           <button
             onClick={handleSave}
-            className="cursor-pointer rounded-sm bg-linear-to-b from-black to-gray-500 py-3 text-white font-medium group"
+            className="cursor-pointer  bg-linear-to-b from-black to-gray-500 py-3 text-white font-medium group"
             style={{
               minWidth: "90px",
               width: "auto",
@@ -114,6 +115,11 @@ export default function WritingPageEditor() {
                 {postType}
               </p>
             </div>
+          </button>
+
+          {/* ai pop up window */}
+          <button className="cursor-pointer px-6 bg-linear-to-b from-black to-gray-500 py-3 text-white font-medium group">
+            Ask-Ai
           </button>
         </div>
       </div>
