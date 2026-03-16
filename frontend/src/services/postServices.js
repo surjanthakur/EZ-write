@@ -72,7 +72,9 @@ const deletePost = async (post_id) => {
 
 const download_as_pdf = async (post_id) => {
   try {
-    const res = API_URL.get(`/download/${post_id}/pdf`);
+    const res = API_URL.get(`/download/${post_id}/pdf`, {
+      responseType: "blob",
+    });
     return {
       ok: true,
       data: res.data,

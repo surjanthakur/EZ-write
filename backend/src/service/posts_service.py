@@ -3,7 +3,7 @@ from uuid import UUID
 from ..db.models import Post, postType
 from ..schemas.posts import PostCreate
 from sqlmodel.ext.asyncio.session import AsyncSession
-from fastapi import status, HTTPException
+from fastapi import status, HTTPException, BackgroundTasks
 from fastapi.responses import FileResponse
 from sqlalchemy.exc import SQLAlchemyError
 from ..repository.posts_repo import post_by_id, get_posts_by_query
@@ -11,6 +11,7 @@ from ..db.models import Post
 from .pdf_template import pdf_template_structure
 from playwright.async_api import async_playwright
 import tempfile
+import os
 
 
 logger = logging.getLogger(__name__)
@@ -132,7 +133,12 @@ async def delete_post_by_id(post_id: UUID, db: AsyncSession, user_id: UUID) -> d
 
 
 # generate pdf from post
-async def generate_pdf_from_html(post_id: UUID, db: AsyncSession, curr_username: str):
+async def generate_pdf_from_html(
+    post_id: UUID,
+    db: AsyncSession,
+    curr_username: str,
+    background_task: BackgroundTasks,
+):
     try:
         # Step 1: Fetch the post by its ID from the database
         post = await post_by_id(post_id=post_id, db=db)
@@ -168,6 +174,8 @@ async def generate_pdf_from_html(post_id: UUID, db: AsyncSession, curr_username:
 
             # Close the browser after PDF generation
             await browser.close()
+
+        background_task.add_task(os.remove, pdf_path)
 
         # Step 6: Return the generated PDF as a file response to the client
         return FileResponse(

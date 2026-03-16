@@ -1,10 +1,32 @@
 import { Trash2, DownloadIcon } from "lucide-react";
 import PostImage from "../../assets/soft-cartoon.jpeg";
+import { UsePosts } from "../../hooks/usePosts";
+import { toast } from "react-hot-toast";
 
 export function PostCard({ post, onDelete }) {
+  const { download_pdf } = UsePosts();
   const typeBadgeColors = {
     blog: "bg-violet-100 text-violet-600",
     article: "bg-amber-100 text-amber-600",
+  };
+
+  // pdf download
+  const handlePdfDownload = async () => {
+    try {
+      const res = await download_pdf(post.post_id);
+      if (!res.ok) {
+        toast.error(res.detail);
+        return;
+      }
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${post.post_id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -60,6 +82,7 @@ export function PostCard({ post, onDelete }) {
             {/* Actions with Popup */}
             <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 relative">
               <button
+                onClick={handlePdfDownload}
                 type="button"
                 className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-green-50 hover:text-green-500 flex items-center justify-center text-gray-400 transition-colors"
               >

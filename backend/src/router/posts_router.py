@@ -1,5 +1,5 @@
 from uuid import UUID
-from fastapi import APIRouter, Depends, status, Query
+from fastapi import APIRouter, Depends, status, Query, BackgroundTasks
 from ..db.db_connection import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
 from ..schemas.posts import PostCreate
@@ -57,10 +57,14 @@ async def delete_post(
 # generate post as pdf
 @post_router.get("/download/{post_id}/pdf")
 async def download_as_pdf(
+    background_task: BackgroundTasks,
     post_id: UUID,
     session_db: AsyncSession = Depends(get_session),
     curr_user: User = Depends(current_user),
 ):
     return await generate_pdf_from_html(
-        post_id=post_id, db=session_db, curr_username=curr_user.username
+        post_id=post_id,
+        db=session_db,
+        curr_username=curr_user.username,
+        background_task=background_task,
     )
