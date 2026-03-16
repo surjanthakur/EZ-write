@@ -2,9 +2,10 @@ import { Trash2, DownloadIcon } from "lucide-react";
 import PostImage from "../../assets/soft-cartoon.jpeg";
 import { UsePosts } from "../../hooks/usePosts";
 import { toast } from "react-hot-toast";
+import { Loader } from "../../components/index";
 
 export function PostCard({ post, onDelete }) {
-  const { download_pdf } = UsePosts();
+  const { download_pdf, loading } = UsePosts();
   const typeBadgeColors = {
     blog: "bg-violet-100 text-violet-600",
     article: "bg-amber-100 text-amber-600",
@@ -18,12 +19,12 @@ export function PostCard({ post, onDelete }) {
         toast.error(res.detail);
         return;
       }
-      const url = window.URL.createObjectURL(new Blob([res.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `${post.post_id}.pdf`);
-      document.body.appendChild(link);
-      link.click();
+      const pdf_url = window.URL.createObjectURL(new Blob([res.data]));
+      const pdf_link = document.createElement("a");
+      pdf_link.setAttribute("download", `${post.post_id}.pdf`);
+      pdf_link.href = pdf_url;
+      document.body.appendChild(pdf_link);
+      pdf_link.click();
     } catch (err) {
       console.log(err);
     }
@@ -31,6 +32,13 @@ export function PostCard({ post, onDelete }) {
 
   return (
     <>
+      {loading ? (
+        <span className="text-gray-400 text-sm">
+          downloading pdf... <Loader />
+        </span>
+      ) : (
+        ""
+      )}
       <div className="flex gap-5 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition-shadow duration-200 group cursor-pointer">
         {/* Thumbnail */}
         <div className="shrink-0 w-28 h-28 rounded-xl overflow-hidden bg-gray-100">

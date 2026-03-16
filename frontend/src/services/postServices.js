@@ -77,7 +77,7 @@ const download_as_pdf = async (post_id) => {
     });
     return {
       ok: true,
-      data: res.data,
+      data: (await res).data,
       status: res.status,
       detail: null,
     };
