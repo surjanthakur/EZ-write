@@ -184,6 +184,13 @@ async def generate_pdf_from_html(
             media_type="application/pdf",
             filename=f"{post.post_id}.pdf",
         )
+    except SQLAlchemyError as err:
+        await db.rollback()
+        logger.error(f"Database error occurred while generating PDF: {err}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="database error occurred. Please try again later.",
+        )
     except Exception as err:
         # Step 7: For any other unexpected errors, roll back DB session, log the error, and raise a 500 error
         await db.rollback()
