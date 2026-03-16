@@ -1,7 +1,6 @@
 import { ArrowRight, BookOpen, Brush, Download, EditIcon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import mainImage from "../assets/Orange Wallpaper.jpeg";
 import { Link } from "react-router-dom";
-import gradientVideo from "../assets/gradient-sound.mp4";
 import { FeatureCard } from "../components/index";
 import { useAuthContext } from "../context/authContext";
 export default function Homepage() {
@@ -31,36 +30,16 @@ export default function Homepage() {
       description: " Organize, revisit, and refine every piece you’ve written.",
     },
   ];
-  const videoRef = useRef(null);
 
-  useEffect(() => {
-    const video = videoRef.current;
-
-    const handleEnd = () => {
-      video.pause();
-    };
-
-    video.addEventListener("ended", handleEnd);
-    return () => {
-      video.removeEventListener("ended", handleEnd);
-    };
-  }, []);
   return (
     <div className="min-h-screen flex flex-col bg-black">
       <section className="relative grow flex items-center justify-center px-6 py-24 md:py-32 overflow-hidden">
-        {/* Background Video */}
-        <video
-          ref={videoRef}
-          muted
-          autoPlay
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src={gradientVideo} type="video/mp4" />
-        </video>
-
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/50"></div>
+        {/* Background image */}
+        <img
+          alt="main-image"
+          src={mainImage}
+          className="absolute inset-0 w-full h-full object-cover blur-lg opacity-60"
+        />
 
         {/* Content */}
         <div className="relative z-10 max-w-5xl mx-auto text-center space-y-10 md:space-y-14">

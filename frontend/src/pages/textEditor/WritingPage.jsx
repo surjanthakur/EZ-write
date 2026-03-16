@@ -48,8 +48,8 @@ export default function WritingPageEditor() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 flex justify-center">
-      <div className="w-full lg:max-w-6xl  md:max-w-5xl px-6 py-16">
+    <div className="min-h-screen bg-zinc-100 flex justify-start">
+      <div className="w-full lg:max-w-5xl md:max-w-4xl py-16 ml-0 md:ml-10">
         {/* Back Arrow */}
         <div className="mb-8">
           <Link
