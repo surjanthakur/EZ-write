@@ -70,4 +70,18 @@ const deletePost = async (post_id) => {
   }
 };
 
-export { createPost, deletePost, posts_by_post_type };
+const download_as_pdf = async (post_id) => {
+  try {
+    const res = API_URL.get(`/download/${post_id}/pdf`);
+    return {
+      ok: true,
+      data: res.data,
+      status: res.status,
+      detail: null,
+    };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
+
+export { createPost, deletePost, posts_by_post_type, download_as_pdf };
