@@ -2,10 +2,10 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { EditorContent, useEditor } from "@tiptap/react";
-import ToolBar from "./ToolBar";
+import ToolBar from "./ToolBar.jsx";
 import BubbleMenuExtension from "@tiptap/extension-bubble-menu";
-import { UsePosts } from "../../hooks/usePosts";
-import ChatWindow from "./ChatWindow";
+import { UsePosts } from "../../hooks/usePosts.js";
+import ChatWindow from "./ChatWindow.jsx";
 import StarterKit from "@tiptap/starter-kit";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
@@ -15,6 +15,7 @@ export default function WritingPageEditor() {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [postType, setPostType] = useState("blog");
+  const [isChatOpen, setIschatOpen] = useState(false);
   const { create_post } = UsePosts();
 
   const editor = useEditor({
@@ -117,11 +118,19 @@ export default function WritingPageEditor() {
               </p>
             </div>
           </button>
-
           {/* ai pop up window */}
-          <button className="cursor-pointer px-6 bg-linear-to-b from-black to-gray-500 py-3 text-white font-medium group">
+
+          <button
+            onClick={() => setIschatOpen(true)}
+            className="cursor-pointer px-6 bg-linear-to-b from-black to-gray-500 py-3 text-white font-medium group"
+          >
             Ask-Ai
           </button>
+
+          <ChatWindow
+            isOpen={isChatOpen}
+            onClose={() => setIschatOpen(false)}
+          />
         </div>
       </div>
     </div>
