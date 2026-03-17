@@ -26,7 +26,6 @@ async def ai_stream_response(user_input: str, username: str):
         reasoning_effort="low",
         response_format={"type": "json_object"},
         stop=None,
-        tools=[{"type": "browser_search"}],
     )
     async for chunk in stream:
         content = chunk.choices[0].delta.content or ""
