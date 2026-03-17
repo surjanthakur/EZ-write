@@ -17,7 +17,7 @@ async def ai_stream_response(user_input: str, username: str):
         messages=[
             {
                 "role": "system",
-                "content": chatbot_prompt(curr_user=username, input_query=user_input),
+                "content": chatbot_prompt(curr_user=username),
             },
         ],
         stream=True,

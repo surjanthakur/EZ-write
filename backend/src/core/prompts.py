@@ -1,2 +1,2 @@
-def chatbot_prompt(curr_user: str, input_query: str):
+def chatbot_prompt(curr_user: str):
     pass
