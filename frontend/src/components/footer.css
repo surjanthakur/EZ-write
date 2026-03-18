@@ -1,0 +1,112 @@
+.footer {
+  position: relative;
+  background: #000;
+  color: #fff;
+  padding: 80px 40px 40px;
+  overflow: hidden;
+}
+
+/* Layout */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Left Section */
+.footer-left {
+  max-width: 300px;
+}
+
+.footer-title {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+/* Icons */
+.footer-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-icons a {
+  border: 1px solid #444;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.footer-icons a:hover {
+  background: #111;
+}
+
+/* Links */
+.footer-links {
+  display: flex;
+  gap: 60px;
+}
+
+.footer-links h4 {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.footer-links p {
+  margin: 6px 0;
+  font-size: 14px;
+  cursor: pointer;
+  color: #ddd;
+}
+
+.footer-links p:hover {
+  color: #fff;
+}
+
+/* BIG TEXT */
+.footer-bg-text {
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  font-size: 220px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.114);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* 🔥 RESPONSIVE */
+@media (max-width: 900px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .footer-links {
+    justify-content: space-between;
+  }
+
+  .footer-bg-text {
+    font-size: 140px;
+    bottom: -20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .footer {
+    padding: 60px 20px;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .footer-bg-text {
+    font-size: 90px;
+  }
+}
