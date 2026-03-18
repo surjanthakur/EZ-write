@@ -29,14 +29,17 @@ const Signup = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-[#030000] via-[#280303] to-[#5a0909]">
         <div className="w-full max-w-md">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-black mb-2">
+          <div className="mb-5">
+            <Link className="text-white" to="/">
+              <ArrowLeft />
+            </Link>
+            <h1 className="text-3xl font-bold text-white mb-2">
               Welcome to InkForge-Ai
             </h1>
-            <p className="text-gray-600">Sign up to your account</p>
+            <p className="text-gray-400">Create your account</p>
           </div>
 
           {/* Loader */}
@@ -47,7 +50,7 @@ const Signup = () => {
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
             {/* Username */}
             <div>
               <label className="block text-sm font-medium text-black mb-2">
@@ -165,14 +168,14 @@ const Signup = () => {
             <button
               type="submit"
               disabled={isSubmitting || loading}
-              className="w-full bg-black text-white font-semibold py-3 px-4 border border-black hover:bg-gray-900 transition duration-200 disabled:opacity-60"
+              className="w-full bg-black text-white font-semibold mt-5 py-3 px-4 border border-black hover:bg-gray-900 transition duration-200 disabled:opacity-60"
             >
               {isSubmitting ? "Signing Up..." : "Sign Up"}
             </button>
           </form>
 
           {/* Sign In Link */}
-          <p className="text-center text-sm text-black mt-4">
+          <p className="text-center text-sm text-white mt-4">
             Already have an account?{" "}
             <Link
               to="/login"

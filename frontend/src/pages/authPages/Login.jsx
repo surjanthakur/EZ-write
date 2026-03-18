@@ -1,4 +1,4 @@
-import { LockIcon, PenIcon } from "lucide-react";
+import { LockIcon, PenIcon, ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -31,12 +31,15 @@ const Login = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-[#030000] via-[#280303] to-[#5a0909]">
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-black mb-2">Welcome Back</h1>
-            <p className="text-gray-600">Sign in to your account</p>
+            <Link className="text-white" to="/">
+              <ArrowLeft />
+            </Link>
+            <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p className="text-gray-400">Sign in to your account</p>
           </div>
 
           {fromEditor && (
@@ -110,23 +113,6 @@ const Login = () => {
               )}
             </div>
 
-            {/* Remember & Forgot Password */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 border border-black bg-white"
-                />
-                <span className="text-sm text-black">Remember me</span>
-              </label>
-              <a
-                href="#"
-                className="text-sm text-black hover:text-gray-700 underline"
-              >
-                Forgot password?
-              </a>
-            </div>
-
             {/* Sign In Button */}
             <button
               type="submit"
@@ -137,7 +123,7 @@ const Login = () => {
             </button>
 
             {/* Sign Up Link */}
-            <p className="text-center text-sm text-black">
+            <p className="text-center text-sm text-white">
               Don't have an account?{" "}
               <Link
                 to="/signup"
@@ -149,19 +135,19 @@ const Login = () => {
 
             {/* Divider */}
             <div className="flex items-center gap-4 my-6">
-              <div className="flex-1 border-t border-black"></div>
-              <span className="text-sm text-black font-medium">
+              <div className="flex-1 border-t border-white"></div>
+              <span className="text-sm text-white font-medium">
                 Or continue with
               </span>
-              <div className="flex-1 border-t border-black"></div>
+              <div className="flex-1 border-t border-white"></div>
             </div>
 
             {/* Social Buttons */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 w-fit">
               {/* Google Button */}
               <button
                 type="button"
-                className="flex items-center justify-center gap-2 border border-black bg-white py-3 px-4 hover:bg-gray-50 transition duration-200"
+                className="flex rounded-md items-center justify-center gap-2 bg-linear-to-br from-blue-500 via-green-500 to-red-500 py-3 px-5 transition duration-200"
               >
                 <svg
                   version="1.1"
