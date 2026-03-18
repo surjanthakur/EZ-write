@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse
 from sqlalchemy.exc import SQLAlchemyError
 from ..repository.posts_repo import post_by_id, get_posts_by_query
 from ..db.models import Post
-from .pdf_template import pdf_template_structure
+from ..core.pdf_template import pdf_template_structure
 from playwright.async_api import async_playwright
 import tempfile
 import os
