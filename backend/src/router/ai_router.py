@@ -15,10 +15,11 @@ async def chatbot(
     curr_user: User = Depends(current_user),
 ):
     try:
-        return StreamingResponse(
-            ai_stream_response(user_input=user_query, username=curr_user.username),
-            media_type="text/event-stream",
+        response = await ai_stream_response(
+            user_input=user_query.message, username=curr_user.username
         )
+
+        return {"role": "ai", "content": response}
     except Exception as err:
         logging.error(f"Chatbot error: {err}")
         raise HTTPException(status_code=500, detail="AI response error")

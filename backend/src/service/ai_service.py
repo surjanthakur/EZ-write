@@ -1,7 +1,6 @@
 from dotenv import load_dotenv
 import os
 from groq import AsyncGroq
-from ..schemas.chatbot import ChatRequest
 from ..core.prompts import chatbot_prompt
 
 load_dotenv()
@@ -12,10 +11,10 @@ groq_key = os.getenv("GROQ_API_KEY")
 client = AsyncGroq(api_key=groq_key)
 
 
-async def ai_stream_response(user_input: ChatRequest, username: str):
+async def ai_stream_response(user_input: str, username: str):
     prompt = chatbot_prompt(curr_user=username)
 
-    stream = await client.chat.completions.create(
+    response = await client.chat.completions.create(
         model="openai/gpt-oss-120b",
         messages=[
             {"role": "system", "content": prompt},
@@ -28,7 +27,4 @@ async def ai_stream_response(user_input: ChatRequest, username: str):
         reasoning_effort="low",
         stop=None,
     )
-    async for chunk in stream:
-        content = chunk.choices[0].delta.content or ""
-        if content:
-            yield content  # ✅ stream chunk-by-chunk
+    return response.choices[0].message.content
