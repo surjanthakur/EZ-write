@@ -53,13 +53,6 @@ async def create_user(user_data: UserCreate, db: AsyncSession) -> dict:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="user already exists!"
         )
-    except Exception as err:
-        await db.rollback()
-        logger.error(f"create_user failed for email: {user_data.email}:=> {err}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Something went wrong, please try again!",
-        )
 
 
 # authenticate user

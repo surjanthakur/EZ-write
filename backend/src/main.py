@@ -59,6 +59,7 @@ async def global_exception_handler(req: Request, exc: Exception):
     )
 
 
+# global HTTP exceptions handlers ----------->
 @app.exception_handler(HTTPException)
 async def http_exception_handler(req: Request, exc: HTTPException):
     logging.error(
