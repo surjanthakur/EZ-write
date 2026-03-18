@@ -20,27 +20,19 @@ logger = logging.getLogger(__name__)
 # create new account service
 async def create_user(user_data: UserCreate, db: AsyncSession) -> dict:
 
-    # Step 1: Check if a user with the given email already exists in the database
-    user = await user_by_email(email=user_data.email, db=db)
-    if user:
-        # If user exists, raise conflict HTTP exception (409)
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail="user already exists"
-        )
-
-    # Step 2: Hash the plaintext password asynchronously
+    # Hash the plaintext password asynchronously
     hashed_pass = await asyncio.get_running_loop().run_in_executor(
         None, pass_hash, user_data.password
     )
 
-    # Step 3: Create a new User [ORM object]
+    # Create a new User [ORM object]
     new_user = User(
         username=user_data.username,
         email=user_data.email,
         password=hashed_pass,
     )
     try:
-        # Step 4: Add the new user to the current DB session
+        # Add the new user to the current DB session
         db.add(new_user)
         await db.commit()
         await db.refresh(new_user)
@@ -49,7 +41,7 @@ async def create_user(user_data: UserCreate, db: AsyncSession) -> dict:
 
     except IntegrityError as err:
         await db.rollback()
-        logger.error(msg=f"error while creating new user: {err}")
+        logger.exception(msg=f"error while creating new user: {err}")
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="user already exists!"
         )
@@ -123,7 +115,7 @@ async def authenticate_user(
         )
 
 
-#! Get the currently authenticated user using session ID stored in the cookie
+# Get the current authenticated user
 async def current_user(
     db: AsyncSession = Depends(get_session),
     session_id: str = Cookie(None),
@@ -183,7 +175,7 @@ async def current_user(
         )
 
 
-#! logout user
+# logout user
 async def logout_user(session_id: str | None) -> dict:
 
     # Step 1: Check if a session ID was provided; if not, there is no session to log out from.
