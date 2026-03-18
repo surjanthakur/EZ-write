@@ -36,12 +36,12 @@ export default function Homepage() {
 
   return (
     <div className="min-h-fit sm:mt-5 flex flex-col bg-black">
-      <section className="relative grow flex items-center justify-center px-6 py-24 md:py-32 overflow-hidden">
+      <section className="relative grow border-zinc-500 border-b flex items-center justify-center px-6 py-24 md:py-32 overflow-hidden">
         {/* Background image */}
         <img
           alt="main-image"
           src={mainImage}
-          className="absolute inset-0 w-full h-full object-cover blur-lg opacity-60"
+          className="absolute inset-0 w-full h-full object-cover backdrop-blur-3xl opacity-60"
         />
 
         {/* Content */}
