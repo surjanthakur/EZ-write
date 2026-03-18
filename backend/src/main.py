@@ -13,7 +13,7 @@ async def lifespan(app: FastAPI):
     try:
         # creating db tables
         await create_db_tables()
-        logging.info(msg="db connection successfully 👍🏻🎊")
+        print("db connection successfully 👍🏻🎊")
         yield
 
     # handle all Exception errors
@@ -44,7 +44,7 @@ async def log_requests(request: Request, call_next):
     start = time.time()
     response = await call_next(request)
     duration = time.time() - start
-    logging.info(msg=f"{request.method} {request.url} took {duration:.2f}seconds.🌏")
+    print(f"{request.method} {request.url} took {duration:.2f}seconds.🌏")
     return response
 
 
