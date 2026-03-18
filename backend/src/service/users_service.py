@@ -2,12 +2,13 @@ import asyncio
 import logging
 import uuid
 import redis.exceptions
-from ..db.models import User
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.exc import IntegrityError
+from fastapi import status, HTTPException, Response, Cookie, Depends
+
+from ..db.models import User
 from ..schemas.user import UserCreate, LoginRequest
 from ..db.redis_client import redis_client
-from fastapi import status, HTTPException, Response, Cookie, Depends
 from ..repository.users_repo import user_by_email, user_by_id
 from ..db.db_connection import get_session
 from ..core.security import pass_hash, verify_password
@@ -16,7 +17,7 @@ from ..core.security import pass_hash, verify_password
 logger = logging.getLogger(__name__)
 
 
-#! create new user
+# create new account service
 async def create_user(user_data: UserCreate, db: AsyncSession) -> dict:
 
     # Step 1: Check if a user with the given email already exists in the database
@@ -39,34 +40,29 @@ async def create_user(user_data: UserCreate, db: AsyncSession) -> dict:
         password=hashed_pass,
     )
     try:
-
         # Step 4: Add the new user to the current DB session
         db.add(new_user)
-        # Step 5: Commit the transaction to save the new user
         await db.commit()
-        # Step 6: Refresh the new_user instance with updated database state (e.g., user_id)
         await db.refresh(new_user)
 
-        # Step 7: Return success message upon successful creation
         return {"detail": "account created!", "success": True}
 
-    except IntegrityError:
-        # Step 8: If an integrity error occurs (e.g., unique constraint), rollback and notify client
+    except IntegrityError as err:
         await db.rollback()
+        logger.error(msg=f"error while creating new user: {err}")
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="user already exists!"
         )
-    except Exception as error:
-        # Step 9: For any other exception, rollback and log the error, then raise generic server error
+    except Exception as err:
         await db.rollback()
-        logger.error(f"create_user failed for email: {user_data.email}:=> {error}")
+        logger.error(f"create_user failed for email: {user_data.email}:=> {err}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Something went wrong, please try again!",
         )
 
 
-#! authenticate user
+# authenticate user
 async def authenticate_user(
     user_data: LoginRequest, response: Response, db: AsyncSession
 ) -> dict:

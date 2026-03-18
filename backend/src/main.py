@@ -2,7 +2,8 @@ import logging
 import time
 
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status, HTTPException
+from fastapi.responses import JSONResponse
 
 from .db.db_connection import create_db_tables
 from .router import users_router, posts_router, ai_router
@@ -46,6 +47,30 @@ async def log_requests(request: Request, call_next):
     duration = time.time() - start
     print(f"{request.method} {request.url} took {duration:.2f}seconds.🌏")
     return response
+
+
+# global exceptions handler ----------->
+@app.exception_handler(Exception)
+async def global_exception_handler(req: Request, exc: Exception):
+    logging.exception(msg=f"error accour while executing api req : =>  {str(exc)}")
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={"detail": "internal error try sometime later", "success": False},
+    )
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(req: Request, exc: HTTPException):
+    logging.error(
+        msg=f"error whiile executing {req.method} REQUEST on URL:{req.url} /// {exc.detail}"
+    )
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "success": False,
+            "detail": exc.detail,
+        },
+    )
 
 
 # all services routers ---------->
