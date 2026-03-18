@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X, User, Bot, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { UseAiHook } from "../../hooks/useAI";
+import { toast } from "react-hot-toast";
 
 import "../css/chatwindow.css";
 
 export default function ChatWindow({ isOpen, onClose }) {
   const [messages, setMessages] = useState([]);
+  const { fetchAIResponse, isLoader } = UseAiHook();
 
   const { register, handleSubmit, reset } = useForm();
   const messagesEndRef = useRef(null);
@@ -19,7 +22,16 @@ export default function ChatWindow({ isOpen, onClose }) {
   }, [messages, isOpen]);
 
   // handle submit
-  const onSubmit = (data) => {};
+  const onSubmit = async (data) => {
+    console.log(data);
+    setMessages((prev) => [...prev, { role: "user", content: data.message }]);
+    const res = await fetchAIResponse(data.message);
+    if (!res.ok) {
+      toast.error(res.detail);
+      return;
+    }
+    setMessages((prev) => [...prev, { role: "ai", content: res.data }]);
+  };
 
   if (!isOpen) return null;
 
@@ -48,11 +60,11 @@ export default function ChatWindow({ isOpen, onClose }) {
           <div className="messages-container">
             {messages.map((message) => (
               <div
-                key={message.id}
-                className={`message-wrapper ${message.type === "ai" ? "ai-message" : "user-message"}`}
+                key={message.role}
+                className={`message-wrapper ${message.role === "ai" ? "ai-message" : "user-message"}`}
               >
                 <div className="message-avatar">
-                  {message.type === "ai" ? (
+                  {message.role === "ai" ? (
                     <Bot size={18} />
                   ) : (
                     <User size={18} />
@@ -60,9 +72,9 @@ export default function ChatWindow({ isOpen, onClose }) {
                 </div>
                 <div className="message-content">
                   <span className="message-sender">
-                    {message.type === "ai" ? "AI Assistant" : "You"}
+                    {message.role === "ai" ? "AI Assistant" : "You"}
                   </span>
-                  <p className="message-text">{message.text}</p>
+                  <p className="message-text">{message.content}</p>
                 </div>
               </div>
             ))}
