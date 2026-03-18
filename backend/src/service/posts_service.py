@@ -133,7 +133,7 @@ async def delete_post_by_id(post_id: UUID, db: AsyncSession, user_id: UUID) -> d
 
 
 # generate pdf from post
-async def generate_pdf_from_html(
+async def generate_pdf(
     post_id: UUID,
     db: AsyncSession,
     curr_username: str,

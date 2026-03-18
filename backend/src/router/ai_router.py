@@ -9,6 +9,7 @@ import logging
 aiRouter = APIRouter(tags=["Chatbot"], prefix="/chatbot")
 
 
+# api to generate ai response for req
 @aiRouter.post("/msg/stream", status_code=status.HTTP_200_OK)
 async def ai_chatbot(
     user_query: ChatRequest,
