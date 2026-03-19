@@ -1,5 +1,5 @@
 from uuid import UUID
-from fastapi import APIRouter, Depends, status, Query, BackgroundTasks
+from fastapi import APIRouter, Depends, status, Query, BackgroundTasks, HTTPException
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from ..db.models import User
@@ -52,7 +52,7 @@ async def create_new_post(
 # delete posts
 @post_router.delete(
     "/delete/{post_id}",
-    status_code=status.HTTP_200_OK,
+    status_code=status.HTTP_204_NO_CONTENT,
     description="Delete a post by its ID for the authenticated user.",
     response_description="Confirmation of deleted post.",
 )
@@ -61,11 +61,17 @@ async def delete_post(
     session_db: AsyncSession = Depends(get_session),
     curr_user: User = Depends(current_user),
 ):
-    return await delete_post_by_id(
+    post = await delete_post_by_id(
         post_id=post_id,
         db=session_db,
         user_id=curr_user.user_id,
     )
+    if post is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Post not found."
+        )
+
+    return
 
 
 # download posts as PDF format

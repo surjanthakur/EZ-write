@@ -23,7 +23,13 @@ logger = logging.getLogger(__name__)
 #  Search posts by query
 async def search_posts(db: AsyncSession, query: str, user_id: UUID) -> List[Post]:
     try:
-        return await get_posts_by_query(db=db, query=query, user_id=user_id)
+        post = await get_posts_by_query(db=db, query=query, user_id=user_id)
+
+        if not post:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="posts not found"
+            )
+        return post
 
     except SQLAlchemyError as error:
         await db.rollback()
@@ -45,11 +51,18 @@ async def create_post(post_data: PostCreate, user_id: UUID, db: AsyncSession) ->
 
     except IntegrityError as err:
         await db.rollback()
-        logger.exception(f"Integrity error creating post: {err}")
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Could not create post due to a data conflict.",
-        )
+        error_msg = str(err.orig)
+        if "unique" in error_msg.lower():
+            raise HTTPException(status_code=409, detail="Post already exists.")
+        elif "foreign key" in error_msg.lower():
+            raise HTTPException(
+                status_code=400, detail="Referenced resource not found."
+            )
+        elif "not null" in error_msg.lower():
+            raise HTTPException(status_code=400, detail="Missing required field.")
+        else:
+            logger.exception(f"Unhandled integrity error: {err}")
+        raise HTTPException(status_code=400, detail="Data conflict.")
 
     except SQLAlchemyError as err:
         await db.rollback()
@@ -61,56 +74,35 @@ async def create_post(post_data: PostCreate, user_id: UUID, db: AsyncSession) ->
 
 
 # Delete a post by its ID and user ID
-async def delete_post_by_id(post_id: UUID, db: AsyncSession, user_id: UUID) -> dict:
+async def delete_post_by_id(post_id: UUID, user_id: UUID, db: AsyncSession) -> dict:
     try:
-
-        # Step 1: Fetch the post by its ID using the posts repository
         post = await post_by_id(post_id=post_id, db=db)
-
-        # Step 2: If the post is not found, raise a 404 Not Found HTTPException
         if not post:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Post not found."
-            )
+            return None
 
-        # Step 3: Check that the requesting user is the owner of the post; otherwise, raise 403
         if post.user_id != user_id:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Not authorized to delete this post.",
-            )
+            raise PermissionError("Not authorized.")
 
-        # Step 4: Delete the post and commit the transaction
         await db.delete(post)
         await db.commit()
 
-        # Step 5: Return a success confirmation as a dict
-        return {"detail": "Post deleted successfully", "success": True}
-
+    except HTTPException:
+        raise
     except SQLAlchemyError as error:
-        # Step 6: Handle DB errors, log the error, rollback, and raise a 500 error
-        logger.error(f"SQLAlchemyError while deleting post {post_id}: {error}")
         await db.rollback()
+        logger.error(f"DB error deleting post {post_id}: {error}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="A database error occurred while deleting the post. Please try again later.",
-        )
-    except Exception as error:
-        # Step 7: Handle unexpected errors, log, rollback, and raise a generic 500 error
-        logger.error(f"Failed to delete post {post_id}: {error}")
-        await db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An error occurred while deleting the post. Please try again later.",
+            detail="Something went wrong, please try again later.",
         )
 
 
 # generate pdf from post
 async def generate_pdf(
     post_id: UUID,
-    db: AsyncSession,
     curr_username: str,
     background_task: BackgroundTasks,
+    db: AsyncSession,
 ):
     try:
         # Step 1: Fetch the post by its ID from the database
