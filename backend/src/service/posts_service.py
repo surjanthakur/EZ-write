@@ -4,9 +4,10 @@ import os
 from uuid import UUID
 from fastapi import status, HTTPException, BackgroundTasks
 from fastapi.responses import FileResponse
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlmodel.ext.asyncio.session import AsyncSession
 from playwright.async_api import async_playwright
+from typing import List
 
 
 from ..db.models import Post, postType
@@ -20,16 +21,9 @@ logger = logging.getLogger(__name__)
 
 
 #  Search posts by query
-async def search_posts(db: AsyncSession, query: str, user_id: UUID) -> Post:
+async def search_posts(db: AsyncSession, query: str, user_id: UUID) -> List[Post]:
     try:
-        posts = await get_posts_by_query(db=db, query=query, user_id=user_id)
-        if not posts:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"posts not found",
-            )
-
-        return posts
+        return await get_posts_by_query(db=db, query=query, user_id=user_id)
 
     except SQLAlchemyError as error:
         await db.rollback()
@@ -42,39 +36,27 @@ async def search_posts(db: AsyncSession, query: str, user_id: UUID) -> Post:
 
 #  Create a new post
 async def create_post(post_data: PostCreate, user_id: UUID, db: AsyncSession) -> dict:
-
-    # Step 1: Create a new Post ORM object from the provided PostCreate schema and user_id
-    new_post = Post(
-        user_id=user_id,
-        title=post_data.title,
-        content=post_data.content,
-        post_type=postType(post_data.post_type.value),
-    )
     try:
-        # Step 2: Add the new post to the session and commit transaction to save in database
+        new_post = Post(user_id=user_id, **post_data.model_dump())
         db.add(new_post)
         await db.commit()
-        # Step 3: Refresh the instance with DB state (e.g., to get DB-generated values)
         await db.refresh(new_post)
+        return {"detail": "Post created successfully", "success": True}
 
-        # Step 4: Return a success confirmation as a dict
-        return {"detail": "post created sucessfully", "success": True}
-
-    except SQLAlchemyError as error:
-        # Step 5: Handle DB integrity or commit errors by rolling back, logging, and raising 500 error
+    except IntegrityError as err:
         await db.rollback()
-        logger.error(f"create_post failed for user_id={user_id}:=> {error}")
+        logger.exception(f"Integrity error creating post: {err}")
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Something went wrong, please try again!",
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Could not create post due to a data conflict.",
         )
-    except Exception as error:
-        # Step 6: Handle unexpected errors by rolling back, logging, and raising a generic 500 error
+
+    except SQLAlchemyError as err:
         await db.rollback()
-        logger.error(f"Unexpected error in create_post for user_id={user_id}: {error}")
+        logger.exception(f"DB error creating post: {err}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="error occurred while creating the post. Please try again later.",
+            detail="Something went wrong, please try again later.",
         )
 
 

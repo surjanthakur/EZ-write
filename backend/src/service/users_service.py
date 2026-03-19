@@ -20,32 +20,33 @@ logger = logging.getLogger(__name__)
 
 # create new account service
 async def create_user(user_data: UserCreate, db: AsyncSession) -> dict:
-
-    # Hash the plaintext password asynchronously
-    hashed_pass = await asyncio.get_running_loop().run_in_executor(
-        None, pass_hash, user_data.password
-    )
-
-    # Create a new User [ORM object]
-    new_user = User(
-        username=user_data.username,
-        email=user_data.email,
-        password=hashed_pass,
-    )
     try:
-        # Add the new user to the current DB session
+        # Hash the plaintext password asynchronously
+        hashed_pass = await asyncio.get_running_loop().run_in_executor(
+            None, pass_hash, user_data.password
+        )
+
+        # Create a new User [ORM object]
+        new_user = User(password=hashed_pass, **user_data.model_dump())
         db.add(new_user)
         await db.commit()
         await db.refresh(new_user)
-
         return {"detail": "account created!", "success": True}
 
     # handle duplicate entity
     except IntegrityError as err:
         await db.rollback()
-        logger.exception(msg=f"error while creating new user: {err}")
+        logger.exception(msg=f"intergrity-error while creating new user: {err}")
         raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail="user already exists!"
+            status_code=status.HTTP_409_CONFLICT,
+            detail="could not create account wrong data format",
+        )
+    except SQLAlchemyError as err:
+        await db.rollback()
+        logger.exception(f"DB error creating account: {err}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong, please try again later.",
         )
 
 
