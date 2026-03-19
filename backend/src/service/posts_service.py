@@ -22,24 +22,21 @@ logger = logging.getLogger(__name__)
 #  Search posts by query
 async def search_posts(db: AsyncSession, query: str, user_id: UUID) -> Post:
     try:
-        # Step 1: Use the posts repository to find posts matching the query and user ID
         posts = await get_posts_by_query(db=db, query=query, user_id=user_id)
-        # Step 2: If no posts are found, raise a 404 Not Found HTTPException
         if not posts:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"No posts found for query: '{query}'",
+                detail=f"posts not found",
             )
-        # Step 3: Return the list of found posts
+
         return posts
 
     except SQLAlchemyError as error:
-        # Step 4: Handle database/SQL errors by rolling back and logging, then raise 500 error
         await db.rollback()
-        logger.error(f"SQLAlchemyError while searching posts: {error}")
+        logger.error(msg=f"db error while searching posts query: {error}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Database error occurred while searching posts, please try again later.",
+            detail="something went wrong please try again later.",
         )
 
 
