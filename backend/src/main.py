@@ -4,12 +4,14 @@ import time
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Request, status, HTTPException
 from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager
 
 from .db.db_connection import create_db_tables
 from .router import users_router, posts_router, ai_router
 
 
 # function connect to db before starting app
+@asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
         # creating db tables

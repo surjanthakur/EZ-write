@@ -3,7 +3,7 @@ import logging
 import uuid
 import redis.exceptions
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from fastapi import status, HTTPException, Response, Cookie, Depends
 
 from ..db.models import User
@@ -14,6 +14,7 @@ from ..db.db_connection import get_session
 from ..core.security import pass_hash, verify_password
 
 
+SESSION_TTL = 60 * 60 * 24
 logger = logging.getLogger(__name__)
 
 
@@ -39,6 +40,7 @@ async def create_user(user_data: UserCreate, db: AsyncSession) -> dict:
 
         return {"detail": "account created!", "success": True}
 
+    # handle duplicate entity
     except IntegrityError as err:
         await db.rollback()
         logger.exception(msg=f"error while creating new user: {err}")
@@ -52,66 +54,62 @@ async def authenticate_user(
     user_data: LoginRequest, response: Response, db: AsyncSession
 ) -> dict:
 
-    # Step 1: Try to find a user in the database by email
+    # Try to find a user in the database by email
     user = await user_by_email(email=user_data.email, db=db)
 
-    # Step 2: If user not found, raise HTTP 401 Unauthorized (invalid email)
+    # does the user exist? check
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password",
         )
 
-    # Step 3: Verify the provided password matches the user's stored password (asynchronously)
+    #  Verify the provided password matches the user's stored password (asynchronously)
     is_valid_pass = await asyncio.get_running_loop().run_in_executor(
         None, verify_password, user_data.password, user.password
     )
 
-    # Step 4: If password is invalid, raise HTTP 401 Unauthorized
+    # is the password correct? check
     if not is_valid_pass:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password",
         )
-    try:
 
-        # Step 5: Generate a unique session ID for this login session
+    try:
         session_id = str(uuid.uuid4())
 
-        # Step 6: Store the mapping of session_id to user_id in Redis with an expiry (24h)
+        # Store the mapping of session_id to user_id in Redis with an expiry (24h)
         await redis_client.set(
-            f"session:{session_id}",
-            str(user.user_id),
-            ex=60 * 60 * 24,
+            f"session:{session_id}", str(user.user_id), ex=SESSION_TTL
         )
 
-        # Step 7: Set a session cookie in the response to authenticate future requests
+        # Set a session cookie in the response to authenticate future requests
         response.set_cookie(
             key="session_id",
             value=session_id,
             httponly=True,
-            max_age=60 * 60 * 24,
+            max_age=SESSION_TTL,
             secure=False,  # todo: set True in production (HTTPS)
             samesite="lax",
         )
 
-        # Step 8: Return a success message to the client
-        return {"detail": "Login successful!", "success": True}
+        return {"detail": "Login successfully", "success": True}
 
-    # Step 9: Handle Redis errors (e.g., Redis service unavailable)
-    except redis.exceptions.RedisError as e:
-        await db.rollback()
-        logger.error(f"Redis error during login for {user_data.email}:=> {e}")
+    # Handle Redis errors (e.g., Redis service unavailable)
+    except redis.exceptions.RedisError as err:
+        logger.error(f"Redis error during login for user_id={user.user_id}:=> {err}")
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Session service unavailable, please try again!",
         )
 
-    # Step 10: Handle any other unexpected errors
-    except Exception as e:
+    except SQLAlchemyError as err:
         await db.rollback()
-        logger.error(f"Unexpected error during login for {user_data.email}:=> {e}")
+        logger.error(f"database error while authenticate user : {err}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="something went wrong try again!",
+            detail="something went wrong try later",
         )
 
 
@@ -121,42 +119,45 @@ async def current_user(
     session_id: str = Cookie(None),
 ) -> User:
     try:
-
-        # Step 1: Ensure the session_id cookie is present
         if not session_id:
-            raise HTTPException(status_code=401, detail="Not authenticated")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
+            )
 
-        # Step 2: Look up the user_id in Redis using the session_id
-        user_id = await redis_client.get(f"session:{session_id}")
+        # Look up the user_id in Redis using the session_id
+        redis_user_id = await redis_client.get(f"session:{session_id}")
 
-        # Step 3: If no user_id found in Redis, the session is invalid or expired
-        if not user_id:
-            raise HTTPException(status_code=401, detail="Not authenticated")
+        if not redis_user_id:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
+            )
 
-        # Step 4: Convert the string user_id from Redis to a UUID object
-        user_id_cast = uuid.UUID(user_id)
+        #  Convert the string user_id from Redis to a UUID object
+        user_id_cast = uuid.UUID(redis_user_id)
 
-        # Step 5: Fetch the User database object by user_id
         curr_user = await user_by_id(id=user_id_cast, db=db)
 
-        # Step 6: If the user is not found in the database, clean up and refuse authentication
+        # If the user is not found in the database, clean up and refuse authentication
         if not curr_user:
             await redis_client.delete(f"session:{session_id}")
-            raise HTTPException(status_code=401, detail="Not authenticated")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
+            )
 
-        # Step 7: Extend session expiry time in Redis (sliding session expiration, set to 1 day)
-        await redis_client.expire(
-            f"session:{session_id}", 60 * 60 * 24
-        )  # 1 day expiry of session_id
+        # set current user in redisCache
+        await redis_client.set(
+            name=f"current_user:{curr_user.username}", value=str(curr_user)
+        )
+        # Extend session expiry time in Redis (sliding session expiration, set to 1 day)
+        await redis_client.expire(name=f"session:{session_id}", time=SESSION_TTL)
 
-        # Step 8: Return the current authenticated User object
         return curr_user
 
     # Handle when the user_id string from Redis can't be parsed into a UUID
-    except ValueError:
+    except ValueError as err:
         await db.rollback()
-        logger.warning(
-            f"Malformed user_id in Redis for session {session_id}: {user_id}"
+        logger.error(
+            f"Malformed user_id in Redis for session {session_id}: {redis_user_id} accours a valueError:=> {err}"
         )
         raise HTTPException(status_code=401, detail="Not authenticated")
 
@@ -165,14 +166,6 @@ async def current_user(
         await db.rollback()
         logger.error(f"Redis error in current_user: {err}")
         raise HTTPException(status_code=503, detail="Session service unavailable")
-
-    # Handle any other unexpected errors (e.g., database exceptions)
-    except Exception as err:
-        await db.rollback()
-        logger.error(f"Database error in current_user: {err}")
-        raise HTTPException(
-            status_code=500, detail="Internal server error while fetching user"
-        )
 
 
 # logout user
