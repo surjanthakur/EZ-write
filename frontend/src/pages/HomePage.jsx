@@ -35,7 +35,7 @@ export default function Homepage() {
   ];
 
   return (
-    <div className="min-h-fit sm:mt-5 flex flex-col bg-black">
+    <div className="min-h-fit sm:mt-14 flex flex-col bg-black">
       <section className="relative grow border-zinc-500 border-b flex items-center justify-center px-6 py-24 md:py-32 overflow-hidden">
         {/* Background image */}
         <img
