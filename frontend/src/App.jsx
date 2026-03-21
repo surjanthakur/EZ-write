@@ -1,4 +1,3 @@
-import "./App.css";
 import MainAppLayout from "./layouts/MainLayout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";

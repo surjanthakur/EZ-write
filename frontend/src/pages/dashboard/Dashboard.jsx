@@ -101,7 +101,7 @@ export default function Dashboard() {
           </button>
           <span className="text-sm text-gray-700 font-medium">Dashboard</span>
           <div className="w-8 h-8 rounded-full bg-linear-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
-            <span className="text-white text-xs font-semibold">
+            <span className="text-black text-xs font-semibold">
               {avatarInitials}
             </span>
           </div>
