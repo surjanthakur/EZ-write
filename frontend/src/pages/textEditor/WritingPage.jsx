@@ -39,7 +39,15 @@ export default function WritingPageEditor() {
 
   // to save content
   const handleSave = async () => {
-    if (!editor) return;
+    if (!editor || editor.isEmpty) {
+      alert("Content cannot be empty");
+      return;
+    }
+    if (!title.trim()) {
+      alert("title is required");
+      return;
+    }
+
     const res = await create_post(postData);
     if (!res.ok) {
       toast.error(res.detail);
@@ -70,6 +78,7 @@ export default function WritingPageEditor() {
           type="text"
           placeholder="Give your story an inspiring title..."
           value={title}
+          required
           onChange={(e) => setTitle(e.target.value)}
           className="w-full text-5xl font-serif font-semibold bg-transparent outline-none mb-2"
         />

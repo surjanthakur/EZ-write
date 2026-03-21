@@ -10,7 +10,6 @@ import "../css/chatwindow.css";
 export default function ChatWindow({ isOpen, onClose }) {
   const [messages, setMessages] = useState([]);
   const { fetchAIResponse, isLoader } = UseAiHook();
-
   const { register, handleSubmit, reset } = useForm();
   const messagesEndRef = useRef(null);
 
