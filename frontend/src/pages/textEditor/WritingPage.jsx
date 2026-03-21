@@ -60,16 +60,16 @@ export default function WritingPageEditor() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 flex justify-start">
-      <div className="w-full lg:max-w-5xl md:max-w-4xl py-16 ml-0 md:ml-10">
+    <div className="min-h-screen bg-zinc-100 flex justify-center px-4">
+      <div className="w-full max-w-5xl py-10 md:py-16 md:ml-10">
         {/* Back Arrow */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <Link
             to="/"
-            className="inline-flex items-center text-black hover:opacity-70 transition"
+            className="inline-flex items-center gap-2 text-black hover:opacity-70 transition"
           >
-            <ArrowLeft size={28} />
-            Back
+            <ArrowLeft size={24} />
+            <span className="text-sm md:text-base">Back</span>
           </Link>
         </div>
 
@@ -80,63 +80,55 @@ export default function WritingPageEditor() {
           value={title}
           required
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full text-5xl font-serif font-semibold bg-transparent outline-none mb-2"
+          className="w-full text-2xl md:text-4xl lg:text-5xl font-serif font-semibold bg-transparent outline-none mb-4"
         />
 
         {/* Editor */}
-        <div className="mt-6 editor-wrapper">
+        <div className="mt-4 md:mt-6 editor-wrapper">
           {editor && <ToolBar editor={editor} />}
           <EditorContent editor={editor} className="ProseMirror" />
         </div>
 
-        <div className="mt-10 gap-3 flex flex-row">
-          {/* post type options */}
-          <div className="flex gap-3">
-            <label className="block text-sm font-medium">Post Type</label>
+        {/* Bottom Controls */}
+        <div className="mt-8 md:mt-10 flex flex-col md:flex-row gap-4 md:items-center">
+          {/* Post Type */}
+          <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
+            <label className="text-sm font-medium">Post Type</label>
             <select
               value={postType}
               onChange={(e) => setPostType(e.target.value)}
-              className=" border px-3 py-2 text-white cursor-pointer bg-linear-to-b from-black to-gray-500"
+              className="border px-3 py-2 text-white cursor-pointer bg-linear-to-b from-black to-gray-500 w-full md:w-auto"
             >
               <option value="blog">blog</option>
               <option value="article">article</option>
             </select>
           </div>
 
-          {/* save button */}
-          <button
-            onClick={handleSave}
-            className="cursor-pointer  bg-linear-to-b from-black to-gray-500 py-3 text-white font-medium group"
-            style={{
-              minWidth: "90px",
-              width: "auto",
-              paddingLeft: "2.25rem",
-              paddingRight: "2.25rem",
-            }}
-          >
-            <div className="relative overflow-hidden flex justify-center items-center">
-              <p
-                className="group-hover:-translate-y-7 duration-[1.125s] ease-[cubic-bezier(0.19,1,0.22,1)] px-2"
-                style={{ whiteSpace: "nowrap" }}
-              >
-                save
-              </p>
-              <p
-                className="absolute top-7 left-0 group-hover:top-0 duration-[1.125s] ease-[cubic-bezier(0.19,1,0.22,1)]"
-                style={{ whiteSpace: "nowrap", width: "100%" }}
-              >
-                {postType}
-              </p>
-            </div>
-          </button>
-          {/* ai pop up window */}
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            {/* Save */}
+            <button
+              onClick={handleSave}
+              className="w-full sm:w-auto bg-linear-to-b from-black to-gray-500 py-3 px-6 text-white font-medium group"
+            >
+              <div className="relative overflow-hidden flex justify-center items-center">
+                <p className="group-hover:-translate-y-7 duration-[1.125s] ease-[cubic-bezier(0.19,1,0.22,1)]">
+                  save
+                </p>
+                <p className="absolute top-7 left-0 group-hover:top-0 duration-[1.125s] ease-[cubic-bezier(0.19,1,0.22,1)] w-full text-center">
+                  {postType}
+                </p>
+              </div>
+            </button>
 
-          <button
-            onClick={() => setIschatOpen(true)}
-            className="cursor-pointer px-6 bg-linear-to-b from-black to-gray-500 py-3 text-white font-medium group"
-          >
-            Ask-Ai
-          </button>
+            {/* Ask AI */}
+            <button
+              onClick={() => setIschatOpen(true)}
+              className="w-full sm:w-auto px-6 bg-linear-to-b from-black to-gray-500 py-3 text-white font-medium"
+            >
+              Ask-Ai
+            </button>
+          </div>
 
           <ChatWindow
             isOpen={isChatOpen}
