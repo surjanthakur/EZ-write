@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, use } from "react";
+import { useEffect, useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 import { PostCard } from "./PostCards";
@@ -37,18 +37,18 @@ export default function Dashboard() {
       toast.error(res.detail);
       return;
     }
-    const posts = await fetch_posts({ query: activeFilter });
-    if (res.ok) setPosts(posts.data);
+    setPosts((prev) => prev.filter((post) => post.post_id != post_id));
   };
 
   useEffect(() => {
-    // to fetch posts based on query
     const loadPosts = async () => {
-      const result = await fetch_posts({ query: activeFilter });
-      if (result.ok) {
-        setPosts(result.data);
-      } else {
-        return;
+      try {
+        const result = await fetch_posts({ query: activeFilter });
+        if (result.ok) {
+          setPosts(result.data);
+        }
+      } catch (err) {
+        toast.error("Failed to fetch posts");
       }
     };
     loadPosts();
