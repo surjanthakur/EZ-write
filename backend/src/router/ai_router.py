@@ -12,7 +12,7 @@ aiRouter = APIRouter(tags=["Chatbot"], prefix="/chatbot")
 
 # api to generate ai response for req
 @aiRouter.post(
-    "/msg/stream",
+    "/conversation",
     status_code=status.HTTP_200_OK,
     description="Generate an AI-powered response to a user message by streaming interaction to the chatbot. Requires authentication.",
     response_description="Returns the chatbot's AI response to the provided user message.",
