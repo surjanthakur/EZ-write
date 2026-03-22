@@ -33,10 +33,12 @@ export default function Dashboard() {
   // to delete posts
   const handle_delete = async (post_id) => {
     const res = await delete_post(post_id);
-    if (res.ok) {
-      const posts = await fetch_posts({ query: activeFilter });
-      if (res.ok) setPosts(posts);
+    if (!res.ok) {
+      toast.error(res.detail);
+      return;
     }
+    const posts = await fetch_posts({ query: activeFilter });
+    if (res.ok) setPosts(posts.data);
   };
 
   useEffect(() => {
