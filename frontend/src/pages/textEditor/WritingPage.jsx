@@ -97,7 +97,7 @@ export default function WritingPageEditor() {
             <select
               value={postType}
               onChange={(e) => setPostType(e.target.value)}
-              className="border px-3 py-2 text-white cursor-pointer bg-linear-to-b from-black to-gray-500 w-full md:w-auto"
+              className="border px-3 py-3 text-white rounded-lg cursor-pointer bg-black w-full md:w-auto"
             >
               <option value="blog">blog</option>
               <option value="article">article</option>
@@ -109,22 +109,15 @@ export default function WritingPageEditor() {
             {/* Save */}
             <button
               onClick={handleSave}
-              className="w-full sm:w-auto bg-linear-to-b from-black to-gray-500 py-3 px-6 text-white font-medium group"
+              className="w-full sm:w-auto bg-black py-3 px-6 text-white font-medium group rounded-lg"
             >
-              <div className="relative overflow-hidden flex justify-center items-center">
-                <p className="group-hover:-translate-y-7 duration-[1.125s] ease-[cubic-bezier(0.19,1,0.22,1)]">
-                  save
-                </p>
-                <p className="absolute top-7 left-0 group-hover:top-0 duration-[1.125s] ease-[cubic-bezier(0.19,1,0.22,1)] w-full text-center">
-                  {postType}
-                </p>
-              </div>
+              save
             </button>
 
             {/* Ask AI */}
             <button
               onClick={() => setIschatOpen(true)}
-              className="w-full sm:w-auto px-6 bg-linear-to-b from-black to-gray-500 py-3 text-white font-medium"
+              className="w-full sm:w-auto px-6 bg-black py-3 text-white font-medium rounded-lg"
             >
               Ask-Ai
             </button>
