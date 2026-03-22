@@ -1,4 +1,10 @@
-def chatbot_prompt(curr_user: str, input_query: str, content: str) -> str:
+def chatbot_prompt(
+    curr_user: str,
+    input_query: str,
+    content: str,
+    post_type: str,
+    title: str,
+) -> str:
     return f"""
 You are Inkforge.ai — {curr_user} ka personal elite AI writing partner & content strategist.
 Tum sirf high-quality blogs, articles aur SEO content banate ho jo rank kare, readers ko pakde aur authority dikhaaye.

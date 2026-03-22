@@ -2,5 +2,7 @@ from pydantic import BaseModel
 
 
 class ChatRequest(BaseModel):
-    message: str
-    context: dict
+    title: str
+    post_type: str
+    context: str
+    user_query: str

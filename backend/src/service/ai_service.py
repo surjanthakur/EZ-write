@@ -11,11 +11,19 @@ groq_key = os.getenv("GROQ_API_KEY")
 client = AsyncGroq(api_key=groq_key)
 
 
-async def ai_stream_response(user_input: str, username: str, content_context: str):
+async def ai_stream_response(
+    user_input: str,
+    username: str,
+    content: str,
+    title: str,
+    post_type: str,
+):
     prompt = chatbot_prompt(
         curr_user=username,
         input_qury=user_input,
-        content=content_context,
+        title=title,
+        content=content,
+        post_type=post_type,
     )
 
     response = await client.chat.completions.create(

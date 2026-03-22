@@ -18,14 +18,16 @@ aiRouter = APIRouter(tags=["Chatbot"], prefix="/chatbot")
     response_description="Returns the chatbot's AI response to the provided user message.",
 )
 async def ai_chatbot(
-    user_query: ChatRequest,
+    user_data: ChatRequest,
     curr_user: User = Depends(current_user),
 ):
     try:
         response = await ai_stream_response(
-            user_input=user_query.message,
+            title=user_data.title,
+            content=user_data.context,
+            user_input=user_data.user_query,
+            post_type=user_data.post_type,
             username=curr_user.username,
-            content_context=user_query.context,
         )
 
         return {"role": "ai", "content": response}
