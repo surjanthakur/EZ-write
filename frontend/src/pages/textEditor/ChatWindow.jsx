@@ -69,7 +69,9 @@ export default function ChatWindow({ isOpen, onClose }) {
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`message-wrapper ${message.role === "ai" ? "ai-message" : "user-message"}`}
+                className={`message-wrapper ${
+                  message.role === "ai" ? "ai-message" : "user-message"
+                }`}
               >
                 <div className="message-avatar">
                   {message.role === "ai" ? (
