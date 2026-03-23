@@ -10,7 +10,7 @@ from playwright.async_api import async_playwright
 from typing import List
 
 
-from ..db.models import Post, postType
+from ..db.models import Post
 from ..schemas.posts import PostCreate
 from ..repository.posts_repo import post_by_id, get_posts_by_query
 from ..db.models import Post
@@ -31,9 +31,9 @@ async def search_posts(db: AsyncSession, query: str, user_id: UUID) -> List[Post
             )
         return post
 
-    except SQLAlchemyError as error:
+    except SQLAlchemyError as err:
         await db.rollback()
-        logger.error(msg=f"db error while searching posts query: {error}")
+        logger.error(msg=f"db error while searching posts query: {err}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="something went wrong please try again later.",
