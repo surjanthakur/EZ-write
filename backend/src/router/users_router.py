@@ -65,3 +65,8 @@ async def get_current_user(curr_user: User = Depends(current_user)):
 )
 async def logout_account(res: Response, session_id: str = Cookie(None)):
     return await logout_user(session_id=session_id, response=res)
+
+
+@user_router.post("/auth/google")
+def google_auth(data: dict):
+    pass
