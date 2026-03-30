@@ -28,7 +28,6 @@ export default function ChatWindow({ isOpen, onClose, post_data }) {
       context: post_data?.content,
       user_query: data?.message,
     };
-    console.log(req_ai_data);
     setMessages((prev) => [
       ...prev,
       { id: new Date().getTime(), role: "user", content: data.message },
