@@ -1,4 +1,4 @@
-import Logo from "../assets/bot-logo.jpg";
+import Logo from "../assets/bot-logo.jpeg";
 import { Menu, XIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../context/authContext";
