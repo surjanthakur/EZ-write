@@ -18,21 +18,16 @@ export default function Navbar() {
         className=" fixed top-0 left-0 right-0 bg-blend-overlay z-50 
     flex items-center justify-between px-6 md:px-8 py-5 
     backdrop-blur-lg backdrop-filter 
-    transition-all duration-300"
+    transition-all duration-300 border-b border-zinc-600"
       >
         {/* Left Section */}
-        <div className="flex items-center gap-3">
-          <a href="/" className="flex items-center gap-2">
-            <img
-              src={Logo}
-              alt="AI Writer Logo"
-              className="w-12 h-12 rounded-4xl object-cover transition-all duration-300 hover:scale-110"
-            />
-            <span className="text-white text-xl font-extralight tracking-wide select-none">
-              Inkforge.ai
-            </span>
-          </a>
-        </div>
+        <a href="/" className="flex items-center gap-2">
+          <img
+            src={Logo}
+            alt="AI Writer Logo"
+            className="w-12 h-12 rounded-4xl object-cover transition-all duration-300 hover:scale-110"
+          />
+        </a>
 
         {/* Right Section */}
         <div className="hidden md:flex items-center gap-10">
