@@ -4,7 +4,6 @@ import { fetchChatbotResponse } from "../services/aiServices";
 export const UseAiHook = () => {
   const [isLoader, setIsLoader] = useState(false);
 
-  //   fetch ai respone
   const fetchAIResponse = async (data) => {
     setIsLoader(true);
     try {
