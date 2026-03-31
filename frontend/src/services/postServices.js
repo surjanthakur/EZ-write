@@ -1,12 +1,11 @@
 import axios from "axios";
 
 // API service functions for post-related operations
-const API_URL = axios.create({
+const api = axios.create({
   baseURL: "http://localhost:8000/api/v1.0/posts",
   withCredentials: true,
 });
 
-// Handles API errors and formats them consistently
 const handleApiError = (err) => {
   const status = err.response?.status || 500;
   const data = err.response?.data;
@@ -25,10 +24,9 @@ const handleApiError = (err) => {
   return { ok: false, status, data, detail };
 };
 
-// Searches for posts based on post type
-const posts_by_post_type = async (data) => {
+const request_handler = async (func) => {
   try {
-    const res = await API_URL.get("/search", { params: data });
+    const res = await func();
     return {
       ok: true,
       data: res.data,
@@ -40,50 +38,20 @@ const posts_by_post_type = async (data) => {
   }
 };
 
-// Creates a new post/story
+const posts_by_type = async (data) => {
+  return await request_handler(() => api.get("/search", { params: data }));
+};
+
 const createPost = async (data) => {
-  try {
-    const res = await API_URL.post("/newStory", data);
-    return {
-      ok: true,
-      data: res.data,
-      status: res.status,
-      detail: null,
-    };
-  } catch (error) {
-    return handleApiError(error);
-  }
+  return await request_handler(() => api.post("/newStory", data));
 };
 
-// Deletes a post by its ID
 const deletePost = async (post_id) => {
-  try {
-    const res = await API_URL.delete(`delete/${post_id}`);
-    return {
-      ok: true,
-      data: res.data,
-      status: res.status,
-      detail: null,
-    };
-  } catch (error) {
-    return handleApiError(error);
-  }
+  return await request_handler(() => api.delete(`/delete/${post_id}`));
 };
 
 const download_as_pdf = async (post_id) => {
-  try {
-    const res = API_URL.get(`/download/${post_id}/pdf`, {
-      responseType: "blob",
-    });
-    return {
-      ok: true,
-      data: (await res).data,
-      status: (await res).status,
-      detail: null,
-    };
-  } catch (err) {
-    return handleApiError(err);
-  }
+  return await request_handler(() => api.get(`/download/${post_id}/pdf`));
 };
 
-export { createPost, deletePost, posts_by_post_type, download_as_pdf };
+export { createPost, deletePost, posts_by_type, download_as_pdf };
