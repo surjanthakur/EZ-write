@@ -13,7 +13,6 @@ from ..repository.users_repo import user_by_email, user_by_id
 from ..db.db_connection import get_session
 from ..core.security import pass_hash, verify_password
 
-
 SESSION_TTL = 60 * 60 * 24
 logger = logging.getLogger(__name__)
 
@@ -21,6 +20,7 @@ logger = logging.getLogger(__name__)
 # create new account service
 async def create_user(user_data: UserCreate, db: AsyncSession) -> dict:
     try:
+
         # Hash the plaintext password asynchronously
         hashed_pass = await asyncio.get_running_loop().run_in_executor(
             None, pass_hash, user_data.password
@@ -94,7 +94,6 @@ async def authenticate_user(
             secure=False,  # todo: set True in production (HTTPS)
             samesite="lax",
         )
-
         return {"detail": "Login successfully", "success": True}
 
     # Handle Redis errors (e.g., Redis service unavailable)
