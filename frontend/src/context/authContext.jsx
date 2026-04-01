@@ -1,5 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { CurrentUser } from "../services/authServices";
+import { currentUser } from "../services/authServices";
 
 export const AuthContext = createContext(null);
 
@@ -10,7 +10,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const get_currUser = async () => {
     try {
-      const res = await CurrentUser();
+      const res = await currentUser();
       if (res.ok) {
         setIsCurrentUser(true);
         setCurrUser(res.data);

@@ -7,7 +7,7 @@ import { useState } from "react";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { isCurrentUser } = useAuthContext();
-  const authItems = ["Dashboard", "Features", "About", "Editor"];
+  const authItems = ["Dashboard", "Features", "About"];
   const guestItems = ["Features", "About", "Login", "Signup"];
 
   const navItems = isCurrentUser ? authItems : guestItems;
