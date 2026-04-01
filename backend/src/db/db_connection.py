@@ -57,8 +57,8 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 
 async def create_db_tables():
     try:
-        async with async_engine.begin() as conn:
-            await conn.run_sync(SQLModel.metadata.create_all)
+        async with async_engine.begin() as connection:
+            await connection.run_sync(SQLModel.metadata.create_all)
     except SQLAlchemyError as err:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
