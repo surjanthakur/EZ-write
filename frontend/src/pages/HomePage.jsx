@@ -2,7 +2,7 @@ import { ArrowRight, BookOpen, Brush, Download, EditIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-import mainImage from "../assets/Orange Wallpaper.jpeg";
+import mainImage from "../assets/Wallpaper.jpeg";
 import { FeatureCard } from "../components/index.js";
 import { useAuthContext } from "../context/authContext.jsx";
 
@@ -41,7 +41,7 @@ export default function Homepage() {
         <img
           alt="main-image"
           src={mainImage}
-          className="absolute inset-0 w-full h-full object-cover backdrop-blur-3xl opacity-60"
+          className="absolute inset-0 w-full h-full object-cover backdrop-blur-3xl opacity-30"
         />
 
         {/* Content */}
