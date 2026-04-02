@@ -10,18 +10,15 @@ import { Loader } from "../../components/index";
 
 export default function Dashboard() {
   const [activeNav, setActiveNav] = useState("home");
-  const [activeFilter, setActiveFilter] = useState("all");
   const [posts, setPosts] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { fetch_posts, delete_post, loading } = UsePosts();
   const { currUser } = useAuthContext();
 
-  const FILTERS = ["all", "blog", "article"];
-
   const safePosts = Array.isArray(posts) ? posts : [];
   const postsCount = safePosts.length;
-  const displayName = currUser?.username || "User";
+  const displayName = currUser?.username || "Null";
 
   const avatarInitials = displayName
     .split(" ")
@@ -30,7 +27,7 @@ export default function Dashboard() {
     .slice(0, 2)
     .toUpperCase();
 
-  // to delete posts
+  // delete posts
   const handle_delete = async (post_id) => {
     const res = await delete_post(post_id);
     if (!res.ok) {
@@ -40,19 +37,14 @@ export default function Dashboard() {
     setPosts((prev) => prev.filter((post) => post.post_id != post_id));
   };
 
-  useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        const result = await fetch_posts({ query: activeFilter });
-        if (result.ok) {
-          setPosts(result.data);
-        }
-      } catch (err) {
-        toast.error("Failed to fetch posts");
-      }
-    };
-    loadPosts();
-  }, [activeFilter]);
+  useEffect(async () => {
+    const posts = await fetch_posts();
+    if (posts.ok == true) {
+      setPosts(posts.data);
+    }
+    toast.error(posts.detail);
+    setPosts([]);
+  });
 
   return (
     <div className="flex min-h-screen bg-gray-200">
@@ -141,22 +133,6 @@ export default function Dashboard() {
                   {postsCount !== 1 ? "s" : ""} found
                 </p>
               </div>
-            </div>
-            {/* Filter Tabs */}
-            <div className="flex gap-2">
-              {FILTERS.map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() => setActiveFilter(filter)}
-                  className={`px-4 py-1.5 rounded-xl text-sm transition-all duration-150 ${
-                    activeFilter === filter
-                      ? "bg-black text-white shadow-sm"
-                      : "bg-white text-gray-500 border border-gray-200 hover:border-gray-300 hover:text-gray-800"
-                  }`}
-                >
-                  {filter}
-                </button>
-              ))}
             </div>
           </div>
 

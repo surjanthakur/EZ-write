@@ -13,11 +13,11 @@ export const UsePosts = () => {
   const request_handler = async (func) => {
     setLoading(true);
     try {
-      const res = await func();
-      if (!res.ok) {
-        return res;
+      const response = await func();
+      if (!response.ok) {
+        return response;
       }
-      return res;
+      return response;
     } finally {
       setLoading(false);
     }
