@@ -12,7 +12,7 @@ class PostType(str, Enum):
 # Request model for creating a new post
 class PostCreate(BaseModel):
     title: str = Field(..., min_length=5, max_length=400)
-    content: str = Field(..., min_length=10)
+    content: str
     post_type: PostType
 
 
