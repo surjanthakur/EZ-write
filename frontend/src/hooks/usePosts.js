@@ -1,14 +1,15 @@
 import { useState } from "react";
 import {
   createPost,
-  posts_by_type,
+  getAllPosts,
   deletePost,
-  download_as_pdf,
+  downloadPdf,
 } from "../services/postServices";
 
 export const UsePosts = () => {
   const [loading, setLoading] = useState(false);
 
+  // req data handler
   const request_handler = async (func) => {
     setLoading(true);
     try {
@@ -22,21 +23,26 @@ export const UsePosts = () => {
     }
   };
 
-  const fetch_posts = async (data) => {
-    return await request_handler(() => posts_by_type(data));
+  // all posts hook
+  const fetch_posts = async () => {
+    return await request_handler(() => getAllPosts());
   };
 
+  // new posts hook
   const create_post = async (data) => {
     return await request_handler(() => createPost(data));
   };
 
+  // delete posts hook
   const delete_post = async (post_id) => {
     return await request_handler(() => deletePost(post_id));
   };
 
+  // download pdf hook
   const download_pdf = async (post_id) => {
-    return await request_handler(() => download_as_pdf(post_id));
+    return await request_handler(() => downloadPdf(post_id));
   };
 
+  // return all hooks
   return { fetch_posts, loading, delete_post, create_post, download_pdf };
 };

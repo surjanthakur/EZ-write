@@ -6,6 +6,7 @@ const api = axios.create({
   withCredentials: true,
 });
 
+// error handler
 const handleApiError = (err) => {
   const status = err.response?.status || 500;
   const data = err.response?.data;
@@ -24,6 +25,7 @@ const handleApiError = (err) => {
   return { ok: false, status, data, detail };
 };
 
+// api req handler
 const request_handler = async (func) => {
   try {
     const res = await func();
@@ -38,8 +40,8 @@ const request_handler = async (func) => {
   }
 };
 
-const posts_by_type = async (data) => {
-  return await request_handler(() => api.get("/search", { params: data }));
+const getAllPosts = async () => {
+  return await request_handler(() => api.get("/all"));
 };
 
 const createPost = async (data) => {
@@ -50,8 +52,8 @@ const deletePost = async (post_id) => {
   return await request_handler(() => api.delete(`/delete/${post_id}`));
 };
 
-const download_as_pdf = async (post_id) => {
+const downloadPdf = async (post_id) => {
   return await request_handler(() => api.get(`/download/${post_id}/pdf`));
 };
 
-export { createPost, deletePost, posts_by_type, download_as_pdf };
+export { createPost, deletePost, getAllPosts, downloadPdf };
