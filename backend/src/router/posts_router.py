@@ -17,8 +17,8 @@ from ..service.posts_service import (
 post_router = APIRouter(prefix="/posts", tags=["posts"])
 
 
-# search query for posts
-@post_router.get("/search", status_code=status.HTTP_200_OK)
+# get all posts of user
+@post_router.get("/all", status_code=status.HTTP_200_OK)
 async def search_posts_by_query(
     session_db: AsyncSession = Depends(get_session),
     curr_user: User = Depends(current_user),
