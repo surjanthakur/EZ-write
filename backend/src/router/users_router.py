@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Depends, status, Response, Cookie, Request
+from fastapi import APIRouter, Depends, status, Response, Cookie
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from ..db.models import User
 from ..db.db_connection import get_session
 from ..schemas.user import UserCreate, LoginRequest, currentUserResponse
-from ..service.google_auth import google_redirect
 from ..service.users_service import (
     create_user,
     authenticate_user,
@@ -48,9 +47,3 @@ async def get_current_user(curr_user: User = Depends(current_user)):
 @user_router.post("/logout", status_code=status.HTTP_200_OK)
 async def logout_account(res: Response, session_id: str = Cookie(None)):
     return await logout_user(session_id=session_id, response=res)
-
-
-# google auth
-@user_router.get("/auth/google")
-async def google_auth(req: Request):
-    return await google_redirect(request=req)
