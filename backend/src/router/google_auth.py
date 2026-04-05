@@ -25,7 +25,13 @@ oauth.register(
 oauth_router = APIRouter(tags=["oauth authentications"], prefix="/auth")
 
 
+# login with google redirection route
 @oauth_router.get("/google/login")
 async def login_google(req: Request):
     redirect_url = req.url_for("auth")
     return await oauth.google.authorize_redirect(req, redirect_url)
+
+
+@oauth_router.get("/google/callback")
+def google_callback():
+    pass
