@@ -5,7 +5,7 @@ const api = axios.create({
 });
 
 const handleApiError = (err) => {
-  const status = err.response?.status || 500;
+  // const status = err.response?.status || 500;
   const data = err.response?.data;
 
   const rawDetail = data?.detail ?? data?.message;
@@ -20,7 +20,7 @@ const handleApiError = (err) => {
             .join(", ")
         : "Something went wrong";
 
-  return { ok: false, status, data, detail };
+  return { ok: false, error_msg: detail };
 };
 
 const request_handler = async (func) => {
