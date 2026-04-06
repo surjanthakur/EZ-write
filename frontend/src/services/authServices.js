@@ -4,10 +4,9 @@ const api = axios.create({
   withCredentials: true,
 });
 
+// error handler
 const handleApiError = (err) => {
-  // const status = err.response?.status || 500;
   const data = err.response?.data;
-
   const rawDetail = data?.detail ?? data?.message;
   const detail =
     typeof rawDetail === "string"
@@ -30,7 +29,6 @@ const request_handler = async (func) => {
       ok: true,
       status: res.status,
       data: res.data,
-      detail: null,
     };
   } catch (error) {
     return handleApiError(error);
