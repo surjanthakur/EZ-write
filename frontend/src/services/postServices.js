@@ -2,7 +2,7 @@ import axios from "axios";
 
 // API service functions for post-related operations
 const api = axios.create({
-  baseURL: "http://localhost:8000/api/v1.0/posts",
+  baseURL: "http://localhost:8000/api/posts",
   withCredentials: true,
 });
 
