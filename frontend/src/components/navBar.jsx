@@ -21,12 +21,13 @@ export default function Navbar() {
     transition-all duration-300 border-b border-zinc-600"
       >
         {/* Left Section */}
-        <a href="/" className="flex items-center gap-2">
+        <a href="/" className="flex text-white text-lg items-center gap-2">
           <img
             src={Logo}
             alt="AI Writer Logo"
             className="w-12 h-12 rounded-4xl object-cover transition-all duration-300 hover:scale-110"
           />
+          EZ-write
         </a>
 
         {/* Right Section */}
