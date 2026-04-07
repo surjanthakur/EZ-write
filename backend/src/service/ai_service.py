@@ -10,7 +10,8 @@ from ..utils.prompts import chatbot_prompt
 
 load_dotenv()
 
-# client
+
+# Initialize client
 google_client = genai.Client(
     api_key=os.getenv("GOOGLE_API_KEY"),
     vertexai=False,
@@ -32,19 +33,30 @@ async def ai_response(
 
         response = await google_client.aio.models.generate_content(
             model="gemini-2.5-flash",
+            # Proper content structure
             contents=types.Content(
                 role="user", parts=types.Part.from_text(text=user_input)
             ),
             config=types.GenerateContentConfig(
-                thinking_config=types.ThinkingConfig(thinking_budget=1024),
+                thinking_config=types.ThinkingConfig(thinking_budget=2048),
                 system_instruction=prompt,
-                temperature=0.1,
+                temperature=0.1,  # Set to 0 to disable thinking for speed/cost  or a value like 2048 if you want reasoning
+                # Optional but recommended
+                max_output_tokens=4088,
             ),
         )
-        return response.text
+        if not response.text:
+            logging.warning(
+                "Empty response.text from Gemini. check the service ai file"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="AI service returned empty response",
+            )
+
     except Exception as err:
-        logging.error(msg=f"error while generating response: {err}")
+        logging.error(f"Error while generating AI response: {err}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="something went wrong !",
+            detail="AI service is currently unavailable. Please try again later.",
         )
