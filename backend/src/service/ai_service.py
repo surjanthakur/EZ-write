@@ -10,13 +10,14 @@ from ..utils.prompts import chatbot_prompt
 
 load_dotenv()
 
+# client
 google_client = genai.Client(
     api_key=os.getenv("GOOGLE_API_KEY"),
     vertexai=False,
 )
 
 
-async def ai_stream_response(
+async def ai_response(
     user_input: str, username: str, content: str, title: str, post_type: str
 ):
     try:

@@ -3,7 +3,7 @@ import logging
 
 from ..service.users_service import current_user
 from ..db.models import User
-from ..service.ai_service import ai_stream_response
+from ..service.ai_service import ai_response
 from ..schemas.chatbot import ChatRequest
 
 aiRouter = APIRouter(tags=["Chatbot"], prefix="/chatbot")
@@ -21,7 +21,7 @@ async def ai_chatbot(
     curr_user: User = Depends(current_user),
 ):
     try:
-        response = await ai_stream_response(
+        response = await ai_response(
             title=user_data.title,
             content=user_data.context,
             user_input=user_data.user_query,
