@@ -49,7 +49,7 @@ export default function Footer() {
       </div>
 
       {/* Big Background Text */}
-      <div className="footer-bg-text">INKFORGE.AI</div>
+      <div className="footer-bg-text">EZ-write</div>
     </footer>
   );
 }

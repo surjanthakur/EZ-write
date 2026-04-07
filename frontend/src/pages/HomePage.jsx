@@ -41,7 +41,7 @@ export default function Homepage() {
         <img
           alt="main-image"
           src={mainImage}
-          className="absolute inset-0 w-full h-full object-cover backdrop-blur-3xl opacity-30"
+          className="absolute inset-0 w-full h-full object-cover backdrop-blur-3xl opacity-50"
         />
 
         {/* Content */}
