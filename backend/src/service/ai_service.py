@@ -9,6 +9,8 @@ import logging
 
 from ..utils.prompts import chatbot_prompt
 
+logger = logging.getLogger(__name__)
+
 load_dotenv()
 
 
@@ -23,7 +25,7 @@ async def ai_response(
     user_input: str, username: str, content: str, title: str, post_type: str
 ):
     try:
-
+        # system prompt
         prompt = chatbot_prompt(
             curr_user=username,
             input_query=user_input,
@@ -46,18 +48,29 @@ async def ai_response(
                 max_output_tokens=4088,
             ),
         )
-        if not response.text:
-            logging.warning(
-                "Empty response.text from Gemini. check the service ai file"
-            )
+        # is response is empty
+        if not response or not response.text:
+            logger.warning("Empty response.text from Gemini. check the service ai file")
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                 detail="AI service returned empty response",
             )
+        return response.text
 
+    except ClientError as err:
+        logger.error(f"client error❌ while generating response: {err}")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="wrong query or format check again and refresh!",
+        )
+    except ServerError as err:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="opps❌ server down try again or refresh the page.",
+        )
     except Exception as err:
-        logging.error(f"Error while generating AI response: {err}", exc_info=True)
+        logger.error(f"Error while generating AI response: {err}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="AI service is currently unavailable. Please try again later.",
+            detail="An unexpected error occurred with the AI service. Please try again later",
         )
