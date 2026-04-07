@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 
 from .db.db_connection import create_db_tables
-from .router import users_router, posts_router, ai_router
+from .router import chatbot_router, users_router, posts_router
 
 
 # function connect to db before starting app
@@ -26,7 +26,7 @@ async def lifespan(app: FastAPI):
 
 
 # creating app
-app = FastAPI(lifespan=lifespan, title="Inkforge.ai", version="1.0")
+app = FastAPI(lifespan=lifespan, title="EZ-write", version="1.0")
 
 origins = ["http://localhost:5173"]
 
@@ -79,4 +79,4 @@ async def http_exception_handler(req: Request, exc: HTTPException):
 # all services routers ---------->
 app.include_router(router=users_router.user_router, prefix="/api")
 app.include_router(router=posts_router.post_router, prefix="/api")
-app.include_router(router=ai_router.aiRouter, prefix="/api")
+app.include_router(router=chatbot_router.ai_router, prefix="/api")
