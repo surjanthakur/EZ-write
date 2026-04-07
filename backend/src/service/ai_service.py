@@ -1,5 +1,6 @@
 from google import genai
 from google.genai import types
+from google.genai.errors import ClientError, ServerError
 
 from fastapi import status, HTTPException
 from dotenv import load_dotenv
@@ -38,7 +39,7 @@ async def ai_response(
                 role="user", parts=types.Part.from_text(text=user_input)
             ),
             config=types.GenerateContentConfig(
-                thinking_config=types.ThinkingConfig(thinking_budget=2048),
+                thinking_config=types.ThinkingConfig(thinking_budget=0),
                 system_instruction=prompt,
                 temperature=0.1,  # Set to 0 to disable thinking for speed/cost  or a value like 2048 if you want reasoning
                 # Optional but recommended
