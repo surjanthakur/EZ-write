@@ -48,26 +48,30 @@ async def ai_response(
                 max_output_tokens=4088,
             ),
         )
-        # is response is empty
+
+        # if response is empty
         if not response or not response.text:
             logger.warning("Empty response.text from Gemini. check the service ai file")
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                 detail="AI service returned empty response",
             )
-        return response.text
+        return {"role": "ai", "content": response.text}
 
+    # handle client error
     except ClientError as err:
         logger.error(f"client error❌ while generating response: {err}")
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="wrong query or format check again and refresh!",
         )
+    # handle server error
     except ServerError as err:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="opps❌ server down try again or refresh the page.",
         )
+    # handle all exception error
     except Exception as err:
         logger.error(f"Error while generating AI response: {err}", exc_info=True)
         raise HTTPException(
