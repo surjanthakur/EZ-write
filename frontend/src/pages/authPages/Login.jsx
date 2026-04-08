@@ -6,7 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { Loader } from "../../components/index";
 import { useAuthContext } from "../../context/authContext";
 
-export default Login = () => {
+export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -151,4 +151,4 @@ export default Login = () => {
       </div>
     </>
   );
-};
+}

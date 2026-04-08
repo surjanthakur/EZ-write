@@ -1,5 +1,5 @@
 import Homepage from "./HomePage";
-import Login from "./authPages/Login";
+import Login from "./authPages/Login.jsx";
 import Signup from "./authPages/signup";
 import AboutUsPage from "./AboutUsPage";
 import WritingPageEditor from "./textEditor/WritingPage";
