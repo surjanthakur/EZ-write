@@ -1,4 +1,5 @@
 import { Trash2, DownloadIcon } from "lucide-react";
+import DOMPurify from "dompurify";
 import PostImage from "../../assets/soft-cartoon.jpeg";
 import { UsePosts } from "../../hooks/usePosts";
 import { toast } from "react-hot-toast";
@@ -31,6 +32,16 @@ export function PostCard({ post, onDelete }) {
       console.log(err);
     }
   };
+
+  // purifyling post content
+  const sanitizedContent = DOMPurify.sanitize(
+    typeof post.content === "string"
+      ? post.content
+      : Array.isArray(post.content) &&
+          typeof post.content[0]?.content === "string"
+        ? post.content[0].content
+        : ""
+  );
 
   return (
     <>
@@ -78,13 +89,7 @@ export function PostCard({ post, onDelete }) {
               <p
                 className="text-sm text-gray-500 mt-1.5 line-clamp-2 leading-relaxed"
                 dangerouslySetInnerHTML={{
-                  __html:
-                    typeof post.content === "string"
-                      ? post.content
-                      : Array.isArray(post.content) &&
-                          typeof post.content[0]?.content === "string"
-                        ? post.content[0].content
-                        : "",
+                  __html: sanitizedContent,
                 }}
               />
             </div>

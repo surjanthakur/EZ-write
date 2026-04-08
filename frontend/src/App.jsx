@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import React, { Suspense } from "react";
 import { Loader } from "./components/index";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import {
   Signup,
@@ -43,8 +44,22 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/about" element={<AboutUsPage />} />
-          <Route path="/editor" element={<WritingPageEditor />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route
+            path="/editor"
+            element={
+              <ProtectedRoute>
+                <WritingPageEditor />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>

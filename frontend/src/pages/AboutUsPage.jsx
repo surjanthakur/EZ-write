@@ -1,4 +1,4 @@
-import my_photo from "../assets/my_photo.jpg";
+import my_photo from "../assets/bot-logo.jpeg";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
