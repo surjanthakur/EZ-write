@@ -55,7 +55,7 @@ async def delete_post(
 # download posts fPDF format
 @post_router.get("/download/{post_id}/pdf", status_code=status.HTTP_200_OK)
 async def download_as_pdf(
-    background_task: BackgroundTasks,
+    background_tasks: BackgroundTasks,
     post_id: UUID,
     session_db: AsyncSession = Depends(get_session),
     curr_user: User = Depends(current_user),
@@ -64,5 +64,5 @@ async def download_as_pdf(
         post_id=post_id,
         db=session_db,
         curr_username=curr_user.username,
-        background_task=background_task,
+        background_tasks=background_tasks,
     )
