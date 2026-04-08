@@ -25,6 +25,8 @@ export function PostCard({ post, onDelete }) {
       pdf_link.href = pdf_url;
       document.body.appendChild(pdf_link);
       pdf_link.click();
+      pdf_link.remove();
+      window.URL.revokeObjectURL(pdf_url);
     } catch (err) {
       console.log(err);
     }

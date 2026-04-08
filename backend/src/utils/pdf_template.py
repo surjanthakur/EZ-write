@@ -1,9 +1,14 @@
+import html
+import re
+
+
 def pdf_template_structure(
     post_user: str,
     post_created_fmt: str,
     post_title: str,
     post_content: str,
 ):
+
     html_template = f"""
 <!DOCTYPE html>
 <html>

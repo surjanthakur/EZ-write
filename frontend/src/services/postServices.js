@@ -52,7 +52,11 @@ const deletePost = async (post_id) => {
 };
 
 const downloadPdf = async (post_id) => {
-  return await request_handler(() => api.get(`/download/${post_id}/pdf`));
+  return await request_handler(() =>
+    api.get(`/download/${post_id}/pdf`, {
+      responseType: "blob",
+    })
+  );
 };
 
 export { createPost, deletePost, getAllPosts, downloadPdf };

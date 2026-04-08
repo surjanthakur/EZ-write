@@ -96,6 +96,7 @@ async def delete_post_by_id(post_id: UUID, user_id: UUID, db: AsyncSession) -> d
         )
 
 
+# generate pdf for posts
 async def generate_pdf(
     post_id: UUID,
     curr_username: str,
@@ -111,10 +112,10 @@ async def generate_pdf(
 
     try:
         html_template = pdf_template_structure(
+            post_user=curr_username,
             post_content=post.content,
             post_title=post.title,
             post_created_fmt=post.created_at.strftime("%-d-%b-%Y"),
-            post_user=curr_username,
         )
 
         temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
