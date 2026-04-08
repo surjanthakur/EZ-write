@@ -16,8 +16,7 @@ export default function Dashboard() {
   const { fetch_posts, delete_post, loading } = UsePosts();
   const { currUser } = useAuthContext();
 
-  const safePosts = Array.isArray(posts) ? posts : [];
-  const postsCount = safePosts.length;
+  const postsCount = posts.length;
   const displayName = currUser?.username || "Null";
 
   const avatarInitials = displayName
@@ -146,8 +145,8 @@ export default function Dashboard() {
 
           {/* Post Cards */}
           <div className="space-y-3">
-            {safePosts.length > 0 ? (
-              safePosts.map((post) => (
+            {posts.length > 0 ? (
+              posts.map((post) => (
                 <PostCard
                   key={post.post_id}
                   post={post}

@@ -92,7 +92,7 @@ export function PostCard({ post, onDelete }) {
               <button
                 onClick={handlePdfDownload}
                 type="button"
-                className="w-8 h-8 border-2 border-black rounded-lg bg-gray-50 hover:bg-green-50 hover:text-green-500 flex items-center justify-center text-gray-400 transition-colors"
+                className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-green-50 hover:text-green-500 flex items-center justify-center text-gray-400 transition-colors"
               >
                 {" "}
                 <DownloadIcon size={14} />
@@ -100,7 +100,7 @@ export function PostCard({ post, onDelete }) {
 
               <button
                 onClick={onDelete}
-                className="w-8 h-8 border-2 border-black rounded-lg bg-gray-50 hover:bg-red-50 hover:text-red-500 flex items-center justify-center text-gray-400 transition-colors"
+                className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-red-50 hover:text-red-500 flex items-center justify-center text-gray-400 transition-colors"
                 type="button"
                 aria-label="Delete"
               >
