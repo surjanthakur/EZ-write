@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, Depends
 
-from ..service.users_service import current_user
+from ..service.auth_service import current_user
 from ..db.models import User
 from ..service.chatbot_service import chatbot_response
 from ..schemas.chatbot import ChatRequest

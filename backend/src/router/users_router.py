@@ -4,7 +4,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from ..db.models import User
 from ..db.db_connection import get_session
 from ..schemas.user import UserCreate, LoginRequest, currentUserResponse
-from ..service.users_service import (
+from ..service.auth_service import (
     create_user,
     authenticate_user,
     current_user,

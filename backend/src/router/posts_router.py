@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status, BackgroundTasks
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from ..db.models import User
-from ..service.users_service import current_user
+from ..service.auth_service import current_user
 from ..db.db_connection import get_session
 from ..schemas.posts import PostCreate
 from ..service.posts_service import (

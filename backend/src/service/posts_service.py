@@ -1,19 +1,20 @@
+import os
 import logging
 import tempfile
-import os
 from uuid import UUID
+from typing import List
+
 from fastapi import status, HTTPException, BackgroundTasks
 from fastapi.responses import FileResponse
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlmodel.ext.asyncio.session import AsyncSession
 from playwright.async_api import async_playwright
-from typing import List
 
 
+from ..db.models import Post
 from ..db.models import Post
 from ..schemas.posts import PostCreate
 from ..repository.posts_repo import post_by_id, get_users_posts
-from ..db.models import Post
 from ..utils.pdf_template import pdf_template_structure
 
 logger = logging.getLogger(__name__)
@@ -22,13 +23,13 @@ logger = logging.getLogger(__name__)
 #  Search posts by query
 async def search_posts(user_id: UUID, db: AsyncSession) -> List[Post]:
     try:
-        post = await get_users_posts(db=db, user_id=user_id)
+        posts = await get_users_posts(db=db, user_id=user_id)
 
-        if not post:
+        if not posts:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="posts not found"
             )
-        return post
+        return posts
 
     except SQLAlchemyError as err:
         await db.rollback()
