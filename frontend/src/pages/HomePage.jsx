@@ -60,11 +60,11 @@ export default function Homepage() {
               className="sm:text-2xl md:text-4xl lg:text-6xl  font-medium leading-tight tracking-wide text-gray-100"
             >
               <span className="block mt-4 md:mt-6 text-lime-300">
-                Let your ideas breathe
+                Let your ideas breathe.
               </span>
-              <span className="block">words flow, and your stories find</span>
+              <span className="block">words flow, and your stories find,</span>
               <span className="block mt-2 md:mt-4 text-lime-300">
-                their shape
+                their shape.
               </span>
             </motion.h1>
 
