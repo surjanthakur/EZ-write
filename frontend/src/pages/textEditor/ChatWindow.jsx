@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { UseAiHook } from "../../hooks/useAI";
 import { toast } from "react-hot-toast";
 import { Loader } from "../../components/index";
+import ReactMarkdown from "react-markdown";
 
 import "../css/chatwindow.css";
 
@@ -90,7 +91,9 @@ export default function ChatWindow({ isOpen, onClose, post_data }) {
                   <span className="message-sender">
                     {message.role === "ai" ? "AI Assistant" : "You"}
                   </span>
-                  <p className="message-text">{message.content}</p>
+                  <ReactMarkdown className="message-text">
+                    {message.content}
+                  </ReactMarkdown>
                 </div>
               </div>
             ))}
