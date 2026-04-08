@@ -5,20 +5,23 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { Loader } from "../../components/index";
 import { useAuthContext } from "../../context/authContext";
-import GoogleIcon from "../../assets/icons8-google.svg";
 
-const Login = () => {
-  const { login, loading } = useAuth();
-  const { get_currUser } = useAuthContext();
+export default Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { login, loading } = useAuth();
+  const { get_currUser } = useAuthContext();
+
   const fromEditor = location.state?.fromEditor;
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
 
+  // form submit logic
   const onSubmit = async (data) => {
     const res = await login(data);
     if (!res.ok) {
@@ -142,23 +145,6 @@ const Login = () => {
                   Sign up
                 </Link>
               </p>
-
-              {/* Divider */}
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-gray-300"></div>
-                <span className="text-xs text-gray-500">Or continue with</span>
-                <div className="flex-1 h-px bg-gray-300"></div>
-              </div>
-
-              {/* Google */}
-              <div className="flex justify-center mt-3">
-                <button
-                  type="button"
-                  className="flex items-center justify-center border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50 transition"
-                >
-                  <img src={GoogleIcon} alt="Google" className="w-10 h-10" />
-                </button>
-              </div>
             </form>
           </div>
         </div>
@@ -166,5 +152,3 @@ const Login = () => {
     </>
   );
 };
-
-export default Login;
