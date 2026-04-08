@@ -91,9 +91,7 @@ export default function ChatWindow({ isOpen, onClose, post_data }) {
                   <span className="message-sender">
                     {message.role === "ai" ? "AI Assistant" : "You"}
                   </span>
-                  <ReactMarkdown className="message-text">
-                    {message.content}
-                  </ReactMarkdown>
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
                 </div>
               </div>
             ))}
