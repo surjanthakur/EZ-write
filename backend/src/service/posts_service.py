@@ -96,22 +96,20 @@ async def delete_post_by_id(post_id: UUID, user_id: UUID, db: AsyncSession) -> d
         )
 
 
-# generate pdf from post
 async def generate_pdf(
     post_id: UUID,
     curr_username: str,
-    background_task: BackgroundTasks,
+    background_tasks: BackgroundTasks,
     db: AsyncSession,
 ):
+    post = await post_by_id(post_id=post_id, db=db)
+
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Post not found."
+        )
+
     try:
-        post = await post_by_id(post_id=post_id, db=db)
-
-        if not post:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="post not found!"
-            )
-
-        # Generate the HTML template for the PDF using post data
         html_template = pdf_template_structure(
             post_content=post.content,
             post_title=post.title,
@@ -119,45 +117,44 @@ async def generate_pdf(
             post_user=curr_username,
         )
 
-        # Create a temporary file to save the generated PDF
         temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
         pdf_path = temp_file.name
         temp_file.close()
 
-        # Use Playwright to launch a headless browser and generate the PDF from the HTML
-        async with async_playwright() as playwrite:
-            browser = await playwrite.chromium.launch()
-            pdf_page = await browser.new_page()
+        try:
+            async with async_playwright() as playwright:
+                browser = await playwright.chromium.launch()
+                page = await browser.new_page()
+                await page.set_content(
+                    html=html_template, wait_until="domcontentloaded"
+                )
+                await page.pdf(path=pdf_path, format="A4", print_background=True)
+                await browser.close()
+        except Exception:
+            os.remove(pdf_path)
+            raise
 
-            # Set the HTML content and wait until network is idle
-            await pdf_page.set_content(html=html_template, wait_until="networkidle")
+        background_tasks.add_task(os.remove, pdf_path)
 
-            # Generate the PDF and save it to the temporary file location
-            await pdf_page.pdf(path=pdf_path, format="A4", print_background=True)
-
-            # Close the browser after PDF generation
-            await browser.close()
-
-        background_task.add_task(os.remove, pdf_path)
-
-        #  Return the generated PDF as a file response to the client
         return FileResponse(
             path=pdf_path,
             status_code=200,
             media_type="application/pdf",
-            filename=f"{post.post_id}.pdf",
+            filename=f"{post_id}.pdf",
         )
+
+    except HTTPException:
+        raise
     except SQLAlchemyError as err:
         await db.rollback()
-        logger.error(f"Database error occurred while generating PDF: {err}")
+        logger.error(f"Database error while generating PDF for post {post_id}: {err}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="database error occurred. Please try again later.",
+            detail="A database error occurred. Please try again later.",
         )
     except Exception as err:
-        await db.rollback()
-        logger.error(f"unexpected error accour while generating pdf:=> {err}")
+        logger.error(f"Unexpected error while generating PDF for post {post_id}: {err}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="something wrong try again",
+            detail="An unexpected error occurred. Please try again later.",
         )
