@@ -82,7 +82,7 @@ export default function Homepage() {
             <motion.div
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
-              className="pt-6 md:pt-10 flex justify-center"
+              className="pt-6 md:pt-10 flex justify-start"
             >
               <Link
                 to={isCurrentUser ? "/editor" : "/login"}
@@ -120,7 +120,7 @@ export default function Homepage() {
               WHAT'S INSIDE
             </p>
 
-            <h2 className="text-3xl md:text-5xl font-serif font-medium">
+            <h2 className="text-3xl md:text-5xl text-lime-300 font-serif font-medium">
               Everything a writer needs,{" "}
               <span className="italic text-zinc-400">nothing they don’t.</span>
             </h2>
