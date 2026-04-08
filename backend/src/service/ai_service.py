@@ -35,7 +35,7 @@ async def ai_response(
         )
 
         response = await google_client.aio.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.1-flash-lite-preview",
             # Proper content structure
             contents=types.Content(role="user", parts=[types.Part(text=user_input)]),
             config=types.GenerateContentConfig(
@@ -65,6 +65,7 @@ async def ai_response(
         )
     # handle server error
     except ServerError as err:
+        logger.error(msg=f"server error from google api: {err}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="opps❌ server down try again or refresh the page.",

@@ -115,6 +115,7 @@ export default function ChatWindow({ isOpen, onClose, post_data }) {
             <div className="input-wrapper">
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="Type your message..."
                 className="message-input"
                 {...register("message", {
