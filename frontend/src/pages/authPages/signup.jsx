@@ -26,7 +26,7 @@ const Signup = () => {
   const onSubmit = async (data) => {
     const res = await signup(data);
     if (!res.ok) {
-      toast.error(res.detail);
+      toast.error(res?.error_msg);
       return;
     }
     toast.success(res.data?.detail);
@@ -38,7 +38,7 @@ const Signup = () => {
   return (
     <>
       <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-black">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-lg">
           {/* Card */}
           <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8">
             {/* Header */}

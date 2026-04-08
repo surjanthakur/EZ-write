@@ -27,7 +27,9 @@ async def create_user(user_data: UserCreate, db: AsyncSession) -> dict:
         )
 
         # Create a new User [ORM object]
-        new_user = User(password=hashed_pass, **user_data.model_dump())
+        new_user = User(
+            password=hashed_pass, **user_data.model_dump(exclude="password")
+        )
         db.add(new_user)
         await db.commit()
         await db.refresh(new_user)

@@ -39,11 +39,6 @@ export default function Dashboard() {
   // fetch all posts
   const handle_fetch_all_posts = async () => {
     const res = await fetch_posts();
-    if (!res.ok) {
-      toast.error(res.error_msg || "Failed to fetch posts");
-      return;
-    }
-
     setPosts(Array.isArray(res.data) ? res.data : []);
   };
 
@@ -154,7 +149,7 @@ export default function Dashboard() {
                 />
               ))
             ) : (
-              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
+              <div className="text-center py-16 bg-gray-300 rounded-lg">
                 <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-3">
                   <Search size={20} className="text-blue-600" />
                 </div>
