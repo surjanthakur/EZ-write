@@ -6,15 +6,14 @@ import { Loader } from "./components/index";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import {
+  Dashboard,
+  Homepage,
   Signup,
   Login,
   AboutUsPage,
   WritingPageEditor,
   PageNotFound,
 } from "./pages/index";
-
-const Homepage = React.lazy(() => import("./pages/HomePage"));
-const DashboardPage = React.lazy(() => import("./pages/dashboard/Dashboard"));
 
 function App() {
   return (
@@ -56,7 +55,7 @@ function App() {
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <DashboardPage />
+                <Dashboard />
               </ProtectedRoute>
             }
           />
