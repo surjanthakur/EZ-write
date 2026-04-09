@@ -45,7 +45,7 @@ export function Sidebar({ activeItem, onNavChange }) {
           </span>
         </div>
         <span className="text-black font-semibold text-base tracking-tight">
-          Inkforge.ai
+          EZ-write
         </span>
       </div>
 
