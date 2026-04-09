@@ -1,7 +1,7 @@
 import MainAppLayout from "./layouts/MainLayout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { Loader } from "./components/index";
 import ProtectedRoute from "./components/ProtectedRoute";
 
