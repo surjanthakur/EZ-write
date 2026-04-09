@@ -1,7 +1,6 @@
 import MainAppLayout from "./layouts/MainLayout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { Suspense } from "react";
 import { Loader } from "./components/index";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -18,50 +17,48 @@ import {
 function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<Loader />}>
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-          toastOptions={{
-            style: {
-              background: "#111",
-              color: "#fff",
-              border: "1px solid #333",
-            },
-            success: {
-              duration: 1000,
-            },
-            error: {
-              duration: 1000,
-            },
-          }}
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: "#111",
+            color: "#fff",
+            border: "1px solid #333",
+          },
+          success: {
+            duration: 1000,
+          },
+          error: {
+            duration: 1000,
+          },
+        }}
+      />
+      <Routes>
+        <Route element={<MainAppLayout />}>
+          <Route path="/" element={<Homepage />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/about" element={<AboutUsPage />} />
+        <Route
+          path="/editor"
+          element={
+            <ProtectedRoute>
+              <WritingPageEditor />
+            </ProtectedRoute>
+          }
         />
-        <Routes>
-          <Route element={<MainAppLayout />}>
-            <Route path="/" element={<Homepage />} />
-          </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/about" element={<AboutUsPage />} />
-          <Route
-            path="/editor"
-            element={
-              <ProtectedRoute>
-                <WritingPageEditor />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Suspense>
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
     </BrowserRouter>
   );
 }
