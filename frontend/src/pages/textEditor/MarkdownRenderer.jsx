@@ -7,7 +7,6 @@ import "../css/markdown.css";
 export default function MarkdownRenderer({ content }) {
   return (
     <ReactMarkdown
-      className="markdown-body"
       remarkPlugins={[remarkGfm]}
       components={{
         // Code blocks with syntax highlighting
