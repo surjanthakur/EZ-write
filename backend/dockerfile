@@ -7,6 +7,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# Create non-root user early so copied files can be owned correctly.
+RUN useradd --create-home appuser
+
 # Minimal system packages used by common Python libs in this project.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -14,15 +17,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install backend dependencies from pyproject (without packaging the app itself).
 RUN pip install --upgrade pip
-COPY pyproject.toml ./
+COPY --chown=appuser:appuser pyproject.toml ./
 RUN python -c "import tomllib; deps = tomllib.load(open('pyproject.toml','rb'))['project']['dependencies']; print('\n'.join(deps))" > /tmp/requirements.txt \
     && pip install -r /tmp/requirements.txt
 
 # Copy backend source.
-COPY . .
+COPY --chown=appuser:appuser . .
 
-# Create and use non-root user for better container security.
-RUN useradd --create-home appuser
+# Use non-root user for better container security.
 USER appuser
 
 EXPOSE 8000
