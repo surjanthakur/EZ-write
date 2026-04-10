@@ -1,11 +1,11 @@
 import logging
-from redis.asyncio import RedisCluster
+import redis.asyncio as redis
 from redis.exceptions import RedisError
 from ..core.settings import settings
 
 logger = logging.getLogger(__name__)
 
-redis_client = RedisCluster(
+redis_client = redis.Redis(
     host=settings.REDIS_HOST,
     port=settings.REDIS_PORT,
     username=settings.REDIS_USERNAME,
@@ -16,8 +16,6 @@ redis_client = RedisCluster(
     retry_on_timeout=True,
     health_check_interval=30,
     max_connections=20,
-    ssl=True,
-    ssl_cert_reqs="required",
 )
 
 
