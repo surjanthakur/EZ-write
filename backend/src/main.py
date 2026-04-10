@@ -32,14 +32,7 @@ async def lifespan(app: FastAPI):
         await close_redis_connection()
 
 
-app = FastAPI(
-    lifespan=lifespan,
-    title="EZ-write",
-    version="1.0",
-    docs_url=None,
-    redoc_url=None,
-    openapi_url=None,
-)
+app = FastAPI(lifespan=lifespan, title="EZ-write", version="1.0")
 
 
 # cors middleware ------------>
