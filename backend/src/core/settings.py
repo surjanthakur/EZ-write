@@ -10,9 +10,12 @@ class Settings(BaseSettings):
     DB_URL: str
     CORS_ORIGIN_URL: str
     GOOGLE_API_KEY: str
+
+    REDIS_HOST: str
+    REDIS_PORT: int = 6379
+    REDIS_USERNAME: str = "default"
     REDIS_PASSWORD: str
-    REDIS_URL: str
-    REDIS_PORT: int
+
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     RELOAD: bool = False
