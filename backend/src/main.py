@@ -9,7 +9,9 @@ from contextlib import asynccontextmanager
 from .db.db_connection import create_db_tables
 from .router import chatbot_router, users_router, posts_router
 from src.core.settings import settings
+from src.core.logging import setup_logging
 
+setup_logging(level=settings.LOG_LEVEL, app_name="ez-write")
 logger = logging.getLogger(__name__)
 
 
