@@ -3,6 +3,8 @@ services:
     build:
       context: ./backend
       dockerfile: dockerfile
+    env_file:
+      - ./backend/.env
     container_name: ez-write-backend
     restart: unless-stopped
     depends_on:
@@ -12,19 +14,6 @@ services:
         condition: service_healthy
     ports:
       - "8000:8000"
-    environment:
-      DB_URL: postgresql+asyncpg://ezwrite:ezwrite@postgres:5432/ezwrite
-      DB_SSL: "false"
-      CORS_ORIGIN_URL: http://localhost:3000
-      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-dummy}
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_USERNAME: default
-      REDIS_PASSWORD: ${REDIS_PASSWORD:-redispass}
-      HOST: 0.0.0.0
-      PORT: 8000
-      RELOAD: "false"
-      LOG_LEVEL: info
 
   postgres:
     image: postgres:16-alpine
@@ -46,13 +35,15 @@ services:
 
   redis:
     image: redis:7-alpine
+    env_file:
+      - ./backend/.env
     container_name: ez-write-redis
     restart: unless-stopped
-    command: ["redis-server", "--requirepass", "redispass"]
+    command: ["sh", "-c", 'redis-server --requirepass "$REDIS_PASSWORD"']
     ports:
       - "6379:6379"
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "redispass", "ping"]
+      test: ["CMD-SHELL", 'redis-cli -a "$REDIS_PASSWORD" ping']
       interval: 5s
       timeout: 3s
       retries: 20
