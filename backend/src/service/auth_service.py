@@ -12,9 +12,22 @@ from ..db.redis_client import redis_client
 from ..repository.users_repo import user_by_email, user_by_id
 from ..db.db_connection import get_session
 from ..utils.auth_security import pass_hash, verify_password
+from ..core.settings import settings
 
 SESSION_TTL = 60 * 60 * 24
 logger = logging.getLogger(__name__)
+
+
+def _session_cookie_config() -> dict:
+    has_local_origin = any(
+        origin.startswith("http://localhost") or origin.startswith("http://127.0.0.1")
+        for origin in settings.cors_origin_urls
+    )
+    secure = not has_local_origin
+    return {
+        "secure": secure,
+        "samesite": "none" if secure else "lax",
+    }
 
 
 # create new account service
@@ -81,6 +94,7 @@ async def authenticate_user(
 
     try:
         session_id = str(uuid.uuid4())
+        cookie_config = _session_cookie_config()
 
         # Store the mapping of session_id to user_id in Redis with an expiry (24h)
         await redis_client.set(
@@ -93,9 +107,8 @@ async def authenticate_user(
             value=session_id,
             httponly=True,
             max_age=SESSION_TTL,
-            secure=True,
-            # Required for cross-site cookie usage (Vercel frontend -> Render backend).
-            samesite="none",
+            secure=cookie_config["secure"],
+            samesite=cookie_config["samesite"],
         )
         return {"detail": "Login successfully", "success": True}
 
@@ -185,14 +198,15 @@ async def logout_user(response: Response, session_id: str | None) -> dict:
         )
 
     try:
+        cookie_config = _session_cookie_config()
         # delete session from redis
         await redis_client.delete(f"session:{session_id}")
         # delete session from cookies
         response.delete_cookie(
             "session_id",
             httponly=True,
-            secure=True,
-            samesite="none",
+            secure=cookie_config["secure"],
+            samesite=cookie_config["samesite"],
         )
         return {"detail": "Successfully logged out."}
 

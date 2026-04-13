@@ -20,6 +20,7 @@ export const AuthContextProvider = ({ children }) => {
       }
       return res;
     } catch (error) {
+      setIsCurrentUser(false);
       setCurrUser(null);
       throw error;
     } finally {
