@@ -1,6 +1,6 @@
 services:
   backend:
-    image: surjan/ez-write-backend:latest
+    image: surjan/ez-write:latest
     platform: linux/amd64
     build:
       context: ./backend
