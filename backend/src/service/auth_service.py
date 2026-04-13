@@ -94,7 +94,8 @@ async def authenticate_user(
             httponly=True,
             max_age=SESSION_TTL,
             secure=True,
-            samesite="lax",
+            # Required for cross-site cookie usage (Vercel frontend -> Render backend).
+            samesite="none",
         )
         return {"detail": "Login successfully", "success": True}
 
@@ -187,7 +188,12 @@ async def logout_user(response: Response, session_id: str | None) -> dict:
         # delete session from redis
         await redis_client.delete(f"session:{session_id}")
         # delete session from cookies
-        response.delete_cookie("session_id", httponly=True)
+        response.delete_cookie(
+            "session_id",
+            httponly=True,
+            secure=True,
+            samesite="none",
+        )
         return {"detail": "Successfully logged out."}
 
     except redis.exceptions.RedisError as err:

@@ -30,9 +30,16 @@ class Settings(BaseSettings):
 
     @property
     def cors_origin_urls(self) -> list[str]:
-        # Support a single origin or comma-separated origins in env.
-        origins = [origin.strip() for origin in self.CORS_ORIGIN_URL.split(",")]
-        return [origin for origin in origins if origin]
+        # Support one/many origins and normalize trailing slash to prevent exact-match CORS failures.
+        raw_origins = [origin.strip() for origin in self.CORS_ORIGIN_URL.split(",")]
+        origins: list[str] = []
+        for origin in raw_origins:
+            if not origin:
+                continue
+            normalized_origin = origin.rstrip("/")
+            if normalized_origin:
+                origins.append(normalized_origin)
+        return origins
 
 
 settings = Settings()
