@@ -12,6 +12,7 @@ export function PostCard({ post, onDelete }) {
     article: "bg-amber-100 text-amber-600",
   };
 
+  // decode raw html/text into string
   const decodeHtmlEntities = (rawContent) => {
     if (typeof rawContent !== "string") return "";
     const parser = new DOMParser();
