@@ -148,7 +148,6 @@ export function PostCard({ post, onDelete }) {
                 type="button"
                 className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-green-50 hover:text-green-500 flex items-center justify-center text-gray-400 transition-colors"
               >
-                {" "}
                 <DownloadIcon size={14} />
               </button>
 
