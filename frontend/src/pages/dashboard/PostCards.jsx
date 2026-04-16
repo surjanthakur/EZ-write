@@ -31,6 +31,7 @@ export function PostCard({ post, onDelete }) {
     "span",
   ];
 
+  // This function decodes HTML entities in a string (e.g., "&amp;" becomes "&") using the browser's DOMParser.
   const decodeHtmlEntities = (value) => {
     if (typeof value !== "string") return "";
     const parser = new DOMParser();
@@ -38,6 +39,10 @@ export function PostCard({ post, onDelete }) {
     return decodedDoc.documentElement.textContent || value;
   };
 
+  // Returns the content string from a post, handling both string and array formats:
+  // - If content is a string, returns it directly.
+  // - If content is an array and the first element has a 'content' string property, returns that property.
+  // - Otherwise, returns an empty string.
   const getPostContent = (content) => {
     if (typeof content === "string") return content;
     if (Array.isArray(content) && typeof content[0]?.content === "string") {
@@ -46,6 +51,8 @@ export function PostCard({ post, onDelete }) {
     return "";
   };
 
+  // Formats the 'createdAt' date string into a user-friendly localized date and time.
+  // Returns an empty string if no date is provided, or the original value if invalid.
   const formatCreatedAt = (createdAt) => {
     if (!createdAt) return "";
     const date = new Date(createdAt);
@@ -56,6 +63,7 @@ export function PostCard({ post, onDelete }) {
     });
   };
 
+  // download pdf based on post id
   const handlePdfDownload = async () => {
     try {
       const res = await download_pdf(post.post_id);
@@ -76,8 +84,13 @@ export function PostCard({ post, onDelete }) {
     }
   };
 
-  const badgeColor =
-    typeBadgeColors[post.post_type] || "bg-gray-100 text-gray-600";
+  // Prepare post rendering data:
+  // - badgeColor: color class for post type badge
+  // - formattedCreatedAt: formatted post creation time
+  // - rawContent: post content string (safe from arrays)
+  // - decodedContent: HTML entities decoded from rawContent
+  // - sanitizedContent: content cleaned with allowed tags and attributes (safe for rendering)
+  const badgeColor = typeBadgeColors[post.post_type] || "";
   const formattedCreatedAt = formatCreatedAt(post.created_at);
   const rawContent = getPostContent(post.content);
   const decodedContent = decodeHtmlEntities(rawContent);
