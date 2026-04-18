@@ -21,7 +21,7 @@ const handleApiError = (err) => {
               typeof message === "string" ? message : message?.msg
             )
             .join(", ")
-        : "Something went wrong";
+        : "oops! Something went wrong";
 
   return { ok: false, error_msg: detail };
 };

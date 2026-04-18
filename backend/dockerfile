@@ -22,6 +22,12 @@ COPY --chown=appuser:appuser pyproject.toml ./
 RUN python -c "import tomllib; deps = tomllib.load(open('pyproject.toml','rb'))['project']['dependencies']; print('\n'.join(deps))" > /tmp/requirements.txt \
     && pip install -r /tmp/requirements.txt
 
+# Playwright: OS deps + Chromium (pip alone does not ship browsers). Fixed path so we can chown for appuser.
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+RUN python -m playwright install-deps chromium \
+    && python -m playwright install chromium \
+    && chown -R appuser:appuser /ms-playwright
+
 # Copy backend source.
 COPY --chown=appuser:appuser . .
 
