@@ -32,7 +32,7 @@ async def chatbot_response(
         )
 
         response = await google_client.aio.models.generate_content(
-            model="gemini-3.1-flash-lite-preview",
+            model="gemini-2.5-flash-lite",
             # Proper content structure
             contents=types.Content(role="user", parts=[types.Part(text=user_input)]),
             config=types.GenerateContentConfig(
